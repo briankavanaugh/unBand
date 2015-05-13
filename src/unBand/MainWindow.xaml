@@ -30,10 +30,6 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Background="{DynamicResource AccentColorBrush}" Grid.Column="0">
-            <Button Style="{DynamicResource MenuImageButton}" ToolTip="My Band" Click="ButtonMyBand_Click"
-                    x:Name="test">
-                <Image Source="/assets/icons/band.png" Height="24" Width="24" />
-            </Button>
             <Button Style="{DynamicResource MenuImageButton}" ToolTip="Activity Data" Click="ButtonActivityLog_Click">
                 <Image Source="/assets/icons/export.png" Height="36" Width="36" />
             </Button>

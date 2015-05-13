@@ -64,7 +64,7 @@ namespace unBand
             }
             else
             {
-                ButtonMyBand_Click(null, null);
+                ButtonActivityLog_Click(null, null);
             }
         }
 
@@ -104,11 +104,6 @@ namespace unBand
             }
 
             return false;
-        }
-
-        private void ButtonMyBand_Click(object sender, RoutedEventArgs e)
-        {
-            PageContent.Content = new MyBandPage();
         }
 
         public void Navigate(UserControl content)

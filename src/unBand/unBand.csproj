@@ -99,10 +99,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Garlic.2.1.0.0\lib\net35\Garlic.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\squirrel.windows.0.9.5.1\lib\Net45\ICSharpCode.SharpZipLib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="MahApps.Metro, Version=1.1.2.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.1.2.0\lib\net45\MahApps.Metro.dll</HintPath>
       <Private>True</Private>
@@ -125,36 +121,8 @@
     <Reference Include="Microsoft.WindowsAPICodePack.Shell">
       <HintPath>..\packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Mono.Cecil.Mdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.Mdb.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Mono.Cecil.Pdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.Pdb.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Mono.Cecil.Rocks, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.Rocks.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NuGet.Core, Version=2.8.60318.667, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.Core.2.8.5\lib\net40-Client\NuGet.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Splat, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Splat.1.6.2\lib\Net45\Splat.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Squirrel, Version=0.9.5.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\squirrel.windows.0.9.5.1\lib\Net45\Squirrel.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -168,30 +136,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="WriteableBitmapEx.Wpf, Version=1.5.0.0, Culture=neutral, PublicKeyToken=50375ca6144f1c69, processorArchitecture=MSIL">
-      <HintPath>..\packages\WriteableBitmapEx.1.5.0.0\lib\net40\WriteableBitmapEx.Wpf.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xceed.Wpf.DataGrid, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Xceed.Wpf.Toolkit, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
       <Private>True</Private>
@@ -285,15 +229,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="pages\MyBandPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="pages\MyBandPage.xaml.cs">
-      <DependentUpon>MyBandPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
