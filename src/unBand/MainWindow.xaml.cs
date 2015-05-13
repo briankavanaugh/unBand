@@ -1,32 +1,18 @@
-﻿using MahApps.Metro.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using unBand.pages;
+using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
-using System.Diagnostics;
 using unBand.BandHelpers;
-using System.Timers;
+using unBand.pages;
 
 namespace unBand
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-
         public MainWindow()
         {
             InitializeComponent();
@@ -88,8 +74,8 @@ namespace unBand
             dialogSettings.AffirmativeButtonText = "Understood";
             dialogSettings.NegativeButtonText = "Exit";
 
-            var dialogResult = await this.ShowMessageAsync("Hello", 
-                "WARNING: This software is not supported by Microsoft, we take no responsibility for what may happen to your Band.\n\n... and no, we haven't seen anything bad... yet.", 
+            var dialogResult = await this.ShowMessageAsync("Hello",
+                "WARNING: This software is not supported by Microsoft, we take no responsibility for what may happen to your Band.\n\n... and no, we haven't seen anything bad... yet.",
                 MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
 
             if (dialogResult == MessageDialogResult.Affirmative)
@@ -103,12 +89,12 @@ namespace unBand
 
         private async Task<bool> AgreeToTelemetry()
         {
-            var dialogSettings = new MetroDialogSettings(); 
+            var dialogSettings = new MetroDialogSettings();
             dialogSettings.AffirmativeButtonText = "I agree";
             dialogSettings.NegativeButtonText = "Exit";
 
             var dialogResult = await this.ShowMessageAsync("Heads Up",
-                "We track usage of certain portions of this application, such as section usage and failure information. We don't collect anything personal (ever), but you should still know about it.\n\n", 
+                "We track usage of certain portions of this application, such as section usage and failure information. We don't collect anything personal (ever), but you should still know about it.\n\n",
                 MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
 
             if (dialogResult == MessageDialogResult.Affirmative)
@@ -169,6 +155,5 @@ namespace unBand
         {
             PageContent.Content = new SettingsPage();
         }
-        
     }
 }

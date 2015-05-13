@@ -1,30 +1,24 @@
-﻿using Microsoft.Band.Admin;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.Band.Admin;
 using unBand.BandHelpers.Sensors;
 
 namespace unBand.BandHelpers
 {
-    class BandSensors
+    internal class BandSensors
     {
-
-        private CargoClient _client;
-
-        public BandPedometer Pedometer { get; set; }
+        private readonly CargoClient _client;
 
         public BandSensors(CargoClient client)
         {
             _client = client;
         }
 
+        public BandPedometer Pedometer { get; set; }
+
         public async Task InitAsync()
         {
             Pedometer = new BandPedometer(_client);
             await Pedometer.InitAsync();
         }
-
     }
 }

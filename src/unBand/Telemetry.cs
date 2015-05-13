@@ -1,10 +1,7 @@
-﻿using Garlic;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Management;
+using Garlic;
 
 namespace unBand
 {
@@ -12,7 +9,7 @@ namespace unBand
     {
         General,
         Theme,
-        Export,
+        Export
     }
 
     public static class Telemetry
@@ -40,7 +37,6 @@ namespace unBand
                 // TODO: would be nice to fire a new OS event on system upgrade
                 TrackEvent(TelemetryCategory.General, "OS", GetOS());
             }
-            
         }
 
         public static void TrackEvent(TelemetryCategory category, string action, object label = null, int value = 0)
@@ -56,34 +52,33 @@ namespace unBand
 
         private static string GetOS()
         {
-            return Environment.OSVersion.VersionString + 
-                " (" + GetFriendlyOS() + ")" +
-                " (" + (Environment.Is64BitOperatingSystem ? "x64" : "x86") + ")";
+            return Environment.OSVersion.VersionString +
+                   " (" + GetFriendlyOS() + ")" +
+                   " (" + (Environment.Is64BitOperatingSystem ? "x64" : "x86") + ")";
         }
 
         private static string GetFriendlyOS()
         {
-            var name = (from x in new ManagementObjectSearcher("SELECT Caption FROM Win32_OperatingSystem").Get().OfType<ManagementObject>()
-                                  select x.GetPropertyValue("Caption")).FirstOrDefault();
+            var name =
+                (from x in
+                    new ManagementObjectSearcher("SELECT Caption FROM Win32_OperatingSystem").Get()
+                        .OfType<ManagementObject>()
+                    select x.GetPropertyValue("Caption")).FirstOrDefault();
             return name != null ? name.ToString() : "Unknown";
         }
 
         /// <summary>
-        /// Poor mans enum -> expanded string.
-        /// 
-        /// Once I've been using this for a while I may change this to a pure enum if 
-        /// spaces in names prove to be annoying for querying / sorting the data
+        ///     Poor mans enum -> expanded string.
+        ///     Once I've been using this for a while I may change this to a pure enum if
+        ///     spaces in names prove to be annoying for querying / sorting the data
         /// </summary>
         public static class TelemetryEvent
         {
             public const string Exception = "Exception";
-
             public const string AppLaunch = "Launch";
             public const string AppUpgraded = "App Upgraded";
-
             public const string DeclinedFirstRunWarning = "Declined First Run Warning";
             public const string DeclinedTelemetry = "Declined Telemetry";
-
             public const string ChangeBackground = "Change Background";
             public const string ChangeThemeColor = "Change Theme Color";
             public const string ChangeStrappIcon = "Change Strapp Icon";

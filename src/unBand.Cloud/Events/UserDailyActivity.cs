@@ -1,33 +1,64 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using unBand.Cloud.Exporters.EventExporters;
 
-namespace unBand.Cloud
+namespace unBand.Cloud.Events
 {
     // This class is unique in that doesn't have a TypeConverter, since it comes from its own Cloud request, so
     // we don't need to guess the type dynamically
     public class UserDailyActivity : BandEventBase
     {
-        private static List<IEventExporter> _exporters;
+        private int _aggregateAverageHeartRate;
+        private int _averageHeartRateSampleCount;
 
-        public override List<IEventExporter> Exporters { get { return new List<IEventExporter>() { UserDailyActivityToCSVExporter.Instance }; } }
+        /// <summary>
+        ///     Called to indicate that this is the constructor for a UserActivity that will be part of a segment, not a top level
+        ///     which we then treat a little different (in other words, call Create() to toplevel)
+        /// </summary>
+        /// <param name="json"></param>
+        /// <param name="toplevel"></param>
+        private UserDailyActivity(JObject json)
+        {
+            dynamic eventSummary = json;
+
+            StartTime = eventSummary.TimeOfDay;
+            DayClassification = eventSummary.DayClassification;
+            ActivityLevel = eventSummary.ActivityLevel;
+            StepsTaken = eventSummary.StepsTaken;
+            HeartRate = new HeartRateSummary((int) eventSummary.AverageHeartRate, (int) eventSummary.LowestHeartRate,
+                (int) eventSummary.PeakHeartRate);
+            CaloriesBurned = eventSummary.CaloriesBurned;
+            UvExposure = eventSummary.UvExposure;
+            TotalDistance = eventSummary.TotalDistance;
+            DayId = StartTime; // TODO: we could 0 this out to be 0:00 UTC based like other activities?
+            ItCal = eventSummary.ItCal;
+
+            // Location is always null, so ignore for now
+
+            EventType = BandEventType.UserDailyActivity;
+        }
+
+        public override List<IEventExporter> Exporters
+        {
+            get { return new List<IEventExporter> {UserDailyActivityToCSVExporter.Instance}; }
+        }
 
         public override BandEventExpandType[] Expanders
         {
-            get { return new BandEventExpandType[] { }; } // nothing to expand for this type
+            get { return new BandEventExpandType[] {}; } // nothing to expand for this type
         }
 
         public List<BandEventBase> Segments { get; private set; }
 
-        public override string FriendlyEventType { get { return "Daily User Activity"; } }
+        public override string FriendlyEventType
+        {
+            get { return "Daily User Activity"; }
+        }
 
-        public override string PrimaryMetric { get { return StepsTaken + " steps";  } }
+        public override string PrimaryMetric
+        {
+            get { return StepsTaken + " steps"; }
+        }
 
         public string DayClassification { get; set; }
         public string ActivityLevel { get; set; }
@@ -36,11 +67,8 @@ namespace unBand.Cloud
         public int TotalDistance { get; set; }
         public int ItCal { get; set; }
 
-        private int _aggregateAverageHeartRate = 0;
-        private int _averageHeartRateSampleCount = 0;
-
         /// <summary>
-        /// Returns a UserActivity object that tracks a User's activity across a given day
+        ///     Returns a UserActivity object that tracks a User's activity across a given day
         /// </summary>
         /// <param name="json"></param>
         /// <returns></returns>
@@ -56,32 +84,6 @@ namespace unBand.Cloud
             return activity;
         }
 
-        /// <summary>
-        /// Called to indicate that this is the constructor for a UserActivity that will be part of a segment, not a top level
-        /// which we then treat a little different (in other words, call Create() to toplevel)
-        /// </summary>
-        /// <param name="json"></param>
-        /// <param name="toplevel"></param>
-        private UserDailyActivity(JObject json) : base()
-        {
-            dynamic eventSummary = (dynamic)json;
-
-            StartTime = eventSummary.TimeOfDay;
-            DayClassification = eventSummary.DayClassification;
-            ActivityLevel = eventSummary.ActivityLevel;
-            StepsTaken = eventSummary.StepsTaken;
-            HeartRate = new HeartRateSummary((int)eventSummary.AverageHeartRate, (int)eventSummary.LowestHeartRate, (int)eventSummary.PeakHeartRate);
-            CaloriesBurned = eventSummary.CaloriesBurned;
-            UvExposure = eventSummary.UvExposure;
-            TotalDistance = eventSummary.TotalDistance;
-            DayId = StartTime; // TODO: we could 0 this out to be 0:00 UTC based like other activities?
-            ItCal = eventSummary.ItCal;
-
-            // Location is always null, so ignore for now
-
-            EventType = BandEventType.UserDailyActivity;
-        }
-        
         public void AddSegment(JObject json)
         {
             // 1. Add the segment as a new UserActivity segment to this one
@@ -111,7 +113,7 @@ namespace unBand.Cloud
                 _averageHeartRateSampleCount++;
                 _aggregateAverageHeartRate += segment.HeartRate.Average;
 
-                HeartRate.Average = _aggregateAverageHeartRate / _averageHeartRateSampleCount;
+                HeartRate.Average = _aggregateAverageHeartRate/_averageHeartRateSampleCount;
             }
         }
 

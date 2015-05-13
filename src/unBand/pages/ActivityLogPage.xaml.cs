@@ -1,27 +1,16 @@
-﻿using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
-using Microsoft.Band;
-using Microsoft.Live;
-using Microsoft.Live.Desktop;
-using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
+using Microsoft.Win32;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using unBand.BandHelpers;
 using unBand.Cloud;
 using unBand.Cloud.Exporters.EventExporters;
@@ -30,50 +19,21 @@ using unBand.CloudHelpers;
 namespace unBand.pages
 {
     /// <summary>
-    /// Interaction logic for MyBandPage.xaml
+    ///     Interaction logic for MyBandPage.xaml
     /// </summary>
     public partial class ActivityLogPage : UserControl, INotifyPropertyChanged
     {
-
-        private BandManager _band;
-        ProgressDialogController _summaryExportProgressDialog;
-        ProgressDialogController _fullExportProgressDialog;
-
-        public Dictionary<string, CloudDataExporter> Exporters { get { return _exporters; } }
-
-        private Dictionary<string, CloudDataExporter> _exporters = new Dictionary<string, CloudDataExporter>()
+        private readonly Dictionary<string, CloudDataExporter> _exporters = new Dictionary<string, CloudDataExporter>
         {
             {"CSV", null},
             {"Excel", null}
         };
 
+        private BandManager _band;
         private KeyValuePair<string, CloudDataExporter> _exporter;
-        public KeyValuePair<string, CloudDataExporter> Exporter
-        {
-            get { return _exporter; }
-            set
-            {
-                if (!value.Equals(_exporter))
-                {
-                    _exporter = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
         private CloudDataExporterSettings _exportSettings;
-        public CloudDataExporterSettings ExportSettings
-        {
-            get { return _exportSettings; }
-            set
-            {
-                if (_exportSettings != value)
-                {
-                    _exportSettings = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
+        private ProgressDialogController _fullExportProgressDialog;
+        private ProgressDialogController _summaryExportProgressDialog;
 
         public ActivityLogPage()
         {
@@ -87,12 +47,43 @@ namespace unBand.pages
 
             _band = BandManager.Instance;
 
-            this.DataContext = BandCloudManager.Instance;
+            DataContext = BandCloudManager.Instance;
 
             BandCloudManager.Instance.AuthenticationCompleted += Instance_AuthenticationCompleted;
         }
 
-        void Instance_AuthenticationCompleted()
+        public Dictionary<string, CloudDataExporter> Exporters
+        {
+            get { return _exporters; }
+        }
+
+        public KeyValuePair<string, CloudDataExporter> Exporter
+        {
+            get { return _exporter; }
+            set
+            {
+                if (!value.Equals(_exporter))
+                {
+                    _exporter = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public CloudDataExporterSettings ExportSettings
+        {
+            get { return _exportSettings; }
+            set
+            {
+                if (_exportSettings != value)
+                {
+                    _exportSettings = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private void Instance_AuthenticationCompleted()
         {
             // BUG #19: When loading events has less impact on the UI / a smooth loading indicator 
             //          reenable this code
@@ -123,26 +114,29 @@ namespace unBand.pages
 
             if (result == true)
             {
-                _summaryExportProgressDialog = await ((MetroWindow)(Window.GetWindow(this))).ShowProgressAsync("Exporting Data", "...");
+                _summaryExportProgressDialog =
+                    await ((MetroWindow) (Window.GetWindow(this))).ShowProgressAsync("Exporting Data", "...");
                 _summaryExportProgressDialog.SetCancelable(true); // TODO: this needs to be implemented. No event?
                 _summaryExportProgressDialog.SetProgress(0);
 
                 var progressIndicator = new Progress<BandCloudExportProgress>(ReportSummaryExportProgress);
 
-                await BandCloudManager.Instance.ExportEventsSummaryToCSV(count, ExportSettings, saveDialog.FileName, progressIndicator);
+                await
+                    BandCloudManager.Instance.ExportEventsSummaryToCSV(count, ExportSettings, saveDialog.FileName,
+                        progressIndicator);
 
                 _summaryExportProgressDialog.CloseAsync();
 
                 if (ExportSettings.OpenFileAfterExport)
                 {
-                    Process.Start(saveDialog.FileName);                    
+                    Process.Start(saveDialog.FileName);
                 }
 
                 SaveExportSettings();
             }
         }
 
-        void ReportSummaryExportProgress(BandCloudExportProgress value)
+        private void ReportSummaryExportProgress(BandCloudExportProgress value)
         {
             // TODO: handle 0 events to export
 
@@ -152,7 +146,7 @@ namespace unBand.pages
             }
             else
             {
-                _summaryExportProgressDialog.SetProgress(((double)(value.ExportedEventsCount) / value.TotalEventsToExport));
+                _summaryExportProgressDialog.SetProgress(((double) (value.ExportedEventsCount)/value.TotalEventsToExport));
             }
 
             if (!string.IsNullOrEmpty(value.StatusMessage))
@@ -161,7 +155,7 @@ namespace unBand.pages
 
         private void btnExport_Click(object sender, RoutedEventArgs e)
         {
-            ExportEventSummaryToCSV(ExportSettings.ExportAll ? (int?)null : 100);
+            ExportEventSummaryToCSV(ExportSettings.ExportAll ? (int?) null : 100);
         }
 
         private async void btnLoadEvents_Click(object sender, RoutedEventArgs e)
@@ -183,7 +177,7 @@ namespace unBand.pages
         {
             // when an Event is selected in the ListBox we need to load the full Event
 
-            var item = ((ListBox)sender).SelectedItem as BandEventViewModel;
+            var item = ((ListBox) sender).SelectedItem as BandEventViewModel;
 
             if (item != null)
             {
@@ -196,17 +190,18 @@ namespace unBand.pages
 
         private void btnExportToGPX_Click(object sender, RoutedEventArgs e)
         {
-            var eventWithMapPoints = ((BandEventViewModel)lstEvents.SelectedItem).Event as IBandEventWithMapPoints;
+            var eventWithMapPoints = ((BandEventViewModel) lstEvents.SelectedItem).Event as IBandEventWithMapPoints;
 
             if (eventWithMapPoints != null)
             {
-                var eventBase = (((BandEventViewModel)lstEvents.SelectedItem).Event as BandExerciseEventBase);
+                var eventBase = (((BandEventViewModel) lstEvents.SelectedItem).Event as BandExerciseEventBase);
 
                 var exporter = GPXExporter.Instance;
 
                 var saveDialog = new SaveFileDialog();
                 saveDialog.AddExtension = true;
-                saveDialog.FileName = eventBase.EventType + "_" + eventBase.EventID + ".gpx"; // TODO: better auto-generated name?
+                saveDialog.FileName = eventBase.EventType + "_" + eventBase.EventID + ".gpx";
+                    // TODO: better auto-generated name?
                 saveDialog.DefaultExt = exporter.DefaultExtension;
 
                 var result = saveDialog.ShowDialog();
@@ -223,16 +218,17 @@ namespace unBand.pages
             // even though this doesn't require MapPoints, implementing MapPoints is a good indicator that 
             // this event has TCX support.
             // TODO: do this based on supported exporters
-            var eventWithMapPoints = ((BandEventViewModel)lstEvents.SelectedItem).Event as IBandEventWithMapPoints;
+            var eventWithMapPoints = ((BandEventViewModel) lstEvents.SelectedItem).Event as IBandEventWithMapPoints;
 
             if (eventWithMapPoints != null)
             {
                 var exporter = TCXExporter.Instance;
-                var eventBase = (((BandEventViewModel)lstEvents.SelectedItem).Event as BandExerciseEventBase);
+                var eventBase = (((BandEventViewModel) lstEvents.SelectedItem).Event as BandExerciseEventBase);
 
                 var saveDialog = new SaveFileDialog();
                 saveDialog.AddExtension = true;
-                saveDialog.FileName = eventBase.EventType + "_" + eventBase.EventID + ".tcx"; // TODO: better auto-generated name?
+                saveDialog.FileName = eventBase.EventType + "_" + eventBase.EventID + ".tcx";
+                    // TODO: better auto-generated name?
                 saveDialog.DefaultExt = exporter.DefaultExtension;
 
                 var result = saveDialog.ShowDialog();
@@ -264,7 +260,10 @@ namespace unBand.pages
 
                 BandCloudManager.Instance.Events.Clear();
 
-                _fullExportProgressDialog = await ((MetroWindow)(Window.GetWindow(this))).ShowProgressAsync("Exporting Full Activity Data", "Loading Activities list...");
+                _fullExportProgressDialog =
+                    await
+                        ((MetroWindow) (Window.GetWindow(this))).ShowProgressAsync("Exporting Full Activity Data",
+                            "Loading Activities list...");
                 _fullExportProgressDialog.SetCancelable(true); // TODO: this needs to be implemented. No event?
                 _fullExportProgressDialog.SetIndeterminate();
 
@@ -284,7 +283,7 @@ namespace unBand.pages
 
                             // we'd exit from the while loop anyway, but only when the progress dialog finally exits
                             // which can take up to 10 seconds, so might as well shut this down asap
-                            return; 
+                            return;
                         }
 
                         await Task.Delay(500);
@@ -294,7 +293,7 @@ namespace unBand.pages
                 await LoadEvents();
 
                 var progressIndicator = new Progress<BandCloudExportProgress>(ReportFullExportProgress);
-                
+
                 // TODO: progress reporter
                 await BandCloudManager.Instance.ExportFullEventData(folder, ExportSettings, progressIndicator);
 
@@ -304,7 +303,7 @@ namespace unBand.pages
             }
         }
 
-        void ReportFullExportProgress(BandCloudExportProgress value)
+        private void ReportFullExportProgress(BandCloudExportProgress value)
         {
             // TODO: handle 0 events to export
 
@@ -314,30 +313,12 @@ namespace unBand.pages
             }
             else
             {
-                _fullExportProgressDialog.SetProgress(((double)(value.ExportedEventsCount) / value.TotalEventsToExport));
+                _fullExportProgressDialog.SetProgress(((double) (value.ExportedEventsCount)/value.TotalEventsToExport));
             }
 
             if (!string.IsNullOrEmpty(value.StatusMessage))
                 _fullExportProgressDialog.SetMessage(value.StatusMessage);
         }
-
-
-        #region INotifyPropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-                }));
-            }
-        }
-
-        #endregion
 
         private IDisposable ShowProgress()
         {
@@ -359,5 +340,20 @@ namespace unBand.pages
                 _progress.Visibility = Visibility.Hidden;
             }
         }
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                Application.Current.Dispatcher.BeginInvoke(
+                    new Action(() => { PropertyChanged(this, new PropertyChangedEventArgs(propertyName)); }));
+            }
+        }
+
+        #endregion
     }
 }

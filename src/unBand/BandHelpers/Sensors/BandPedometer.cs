@@ -1,22 +1,23 @@
-﻿using Microsoft.Band.Admin;
-using Microsoft.Band.Admin.Streaming;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Band.Admin;
+using Microsoft.Band.Admin.Streaming;
 
-namespace unBand.BandHelpers.Sensors 
+namespace unBand.BandHelpers.Sensors
 {
-    public class BandPedometer: INotifyPropertyChanged
+    public class BandPedometer : INotifyPropertyChanged
     {
-
-        private CargoClient _client;
-        private uint _totalSteps;
+        private readonly CargoClient _client;
         private uint _totalMovements;
+        private uint _totalSteps;
+
+        public BandPedometer(CargoClient client)
+        {
+            _client = client;
+        }
 
         public uint TotalSteps
         {
@@ -44,19 +45,14 @@ namespace unBand.BandHelpers.Sensors
             }
         }
 
-        public BandPedometer(CargoClient client)
-        {
-            _client = client;
-        }
-
         public async Task InitAsync()
         {
             await OneTimePedometerReading();
         }
 
         /// <summary>
-        /// To start us off we get an initial, one-off, Pedometer reading.
-        /// To get consistent updates use TODO: StartPedometer();
+        ///     To start us off we get an initial, one-off, Pedometer reading.
+        ///     To get consistent updates use TODO: StartPedometer();
         /// </summary>
         private async Task OneTimePedometerReading()
         {
@@ -64,10 +60,10 @@ namespace unBand.BandHelpers.Sensors
             await _client.SensorSubscribeAsync(SensorType.Pedometer);
         }
 
-        void _client_OneTimePedometerUpdated(object sender, PedometerUpdatedEventArgs e)
+        private void _client_OneTimePedometerUpdated(object sender, PedometerUpdatedEventArgs e)
         {
             _client.SensorUnsubscribe(SensorType.Pedometer);
-            
+
             TotalSteps = e.TotalSteps;
             TotalMovements = e.TotalMovements;
 
@@ -78,14 +74,12 @@ namespace unBand.BandHelpers.Sensors
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
             {
-                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-                }));
+                Application.Current.Dispatcher.BeginInvoke(
+                    new Action(() => { PropertyChanged(this, new PropertyChangedEventArgs(propertyName)); }));
             }
         }
 

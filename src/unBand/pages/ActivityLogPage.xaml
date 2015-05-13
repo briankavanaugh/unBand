@@ -1,8 +1,8 @@
 ﻿<UserControl x:Class="unBand.pages.ActivityLogPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:BandControls="clr-namespace:unBand.Controls"
              xmlns:local="clr-namespace:unBand"
@@ -10,46 +10,54 @@
              x:Name="this">
 
     <Grid>
-        <BandControls:WaitingForMSA Visibility="{Binding IsLoggedIn, ConverterParameter=true, Converter={StaticResource BoolToVisibilityConverter}}" local:DesignHelpers.IsHidden="true"></BandControls:WaitingForMSA>
+        <BandControls:WaitingForMSA
+            Visibility="{Binding IsLoggedIn, ConverterParameter=true, Converter={StaticResource BoolToVisibilityConverter}}"
+            local:DesignHelpers.IsHidden="true" />
 
         <Grid Visibility="{Binding IsLoggedIn, Converter={StaticResource BoolToVisibilityConverter}}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="110"/>
-                <RowDefinition Height="10"/>
-                <RowDefinition/>
+                <RowDefinition Height="110" />
+                <RowDefinition Height="10" />
+                <RowDefinition />
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0" DataContext="{Binding ElementName=this}">
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="190"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="190" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <Grid Grid.Column="0">
 
                     <TextBlock Margin="0,0,0,0" TextWrapping="Wrap">You can view your events directly in this app, or export your data to a file. Choose an action below:</TextBlock>
 
-                    <Button ToolTip="Display your events below" Click="btnLoadEvents_Click" Margin="0,40,120,0" Style="{DynamicResource MetroCircleButtonStyle}" BorderBrush="Black" Height="50" Width="50">
-                        <Image Source="/assets/actions/load_activities.png" Height="48" Width="48"></Image>
+                    <Button ToolTip="Display your events below" Click="btnLoadEvents_Click" Margin="0,40,120,0"
+                            Style="{DynamicResource MetroCircleButtonStyle}" BorderBrush="Black" Height="50" Width="50">
+                        <Image Source="/assets/actions/load_activities.png" Height="48" Width="48" />
                     </Button>
 
-                    <Button ToolTip="Export a summary of all of the events that match your selection settings" Click="btnExport_Click" Margin="30,40,40,0" Style="{DynamicResource MetroCircleButtonStyle}" BorderBrush="Black" Height="50" Width="50">
-                        <Image Source="/assets/actions/export_summary.png" Height="48" Width="48"></Image>
+                    <Button ToolTip="Export a summary of all of the events that match your selection settings"
+                            Click="btnExport_Click" Margin="30,40,40,0"
+                            Style="{DynamicResource MetroCircleButtonStyle}" BorderBrush="Black" Height="50" Width="50">
+                        <Image Source="/assets/actions/export_summary.png" Height="48" Width="48" />
                     </Button>
 
-                    <Button ToolTip="Export all of the data from all of the events that match your selection settings" Margin="100,40,0,0" Click="btnExportAll_Click" Style="{DynamicResource MetroCircleButtonStyle}" BorderBrush="Black" Height="50" Width="50" >
-                        <Image Source="/assets/actions/export_full.png" Height="48" Width="48"></Image>
+                    <Button ToolTip="Export all of the data from all of the events that match your selection settings"
+                            Margin="100,40,0,0" Click="btnExportAll_Click"
+                            Style="{DynamicResource MetroCircleButtonStyle}" BorderBrush="Black" Height="50" Width="50">
+                        <Image Source="/assets/actions/export_full.png" Height="48" Width="48" />
                     </Button>
                 </Grid>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
 
-                    <Expander Header="Activities" ExpandDirection="Right" IsExpanded="True" Style="{StaticResource RightVerticalExpanderHeader}">
+                    <Expander Header="Activities" ExpandDirection="Right" IsExpanded="True"
+                              Style="{StaticResource RightVerticalExpanderHeader}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0">
                                 <CheckBox Margin="5" IsChecked="{Binding Path=ExportSettings.IncludeSteps}">Steps</CheckBox>
@@ -64,20 +72,26 @@
 
                     </Expander>
 
-                    <Expander Header="Range" ExpandDirection="Right" IsExpanded="True" Style="{StaticResource RightVerticalExpanderHeader}">
+                    <Expander Header="Range" ExpandDirection="Right" IsExpanded="True"
+                              Style="{StaticResource RightVerticalExpanderHeader}">
                         <StackPanel Width="170">
                             <TextBlock Margin="5" TextWrapping="Wrap">Dates coming soon. For now:</TextBlock>
-                            <RadioButton Margin="5" IsChecked="{Binding Path=ExportSettings.ExportAll, Mode=OneWay, Converter={StaticResource ReverseBoolConverter}}">Last 100 Activities</RadioButton>
+                            <RadioButton Margin="5"
+                                         IsChecked="{Binding Path=ExportSettings.ExportAll, Mode=OneWay, Converter={StaticResource ReverseBoolConverter}}">
+                                Last 100 Activities
+                            </RadioButton>
                             <RadioButton Margin="5" IsChecked="{Binding Path=ExportSettings.ExportAll}">All Activities</RadioButton>
                         </StackPanel>
                     </Expander>
 
-                    <Expander Header="Options" ExpandDirection="Right" IsExpanded="True" Style="{StaticResource RightVerticalExpanderHeader}">
+                    <Expander Header="Options" ExpandDirection="Right" IsExpanded="True"
+                              Style="{StaticResource RightVerticalExpanderHeader}">
                         <StackPanel>
                             <StackPanel Margin="5" Orientation="Horizontal" Visibility="Collapsed">
                                 <TextBlock Height="15">Format:</TextBlock>
-                                <ComboBox Margin="5,0,5,0" HorizontalAlignment="Left" x:Name="cmbFormat" ItemsSource="{Binding Path=Exporters}" DisplayMemberPath="Key" SelectedValue="{Binding ElementName=this, Path=Exporter}" Width="70">
-                                </ComboBox>
+                                <ComboBox Margin="5,0,5,0" HorizontalAlignment="Left" x:Name="cmbFormat"
+                                          ItemsSource="{Binding Path=Exporters}" DisplayMemberPath="Key"
+                                          SelectedValue="{Binding ElementName=this, Path=Exporter}" Width="70" />
                             </StackPanel>
                             <CheckBox Margin="5" IsChecked="{Binding ExportSettings.OpenFileAfterExport}">Open file when finished</CheckBox>
                             <CheckBox Margin="5" IsChecked="{Binding ExportSettings.ConvertDateTimeToLocal}">Convert UTC to local time</CheckBox>
@@ -87,96 +101,116 @@
                 </StackPanel>
 
             </Grid>
-            <Grid Grid.Row ="1">
-                <ProgressBar Name="ActivityBar" Grid.ColumnSpan="2" VerticalAlignment="Top" Panel.ZIndex="1" IsIndeterminate="True" Visibility="Hidden"/>
+            <Grid Grid.Row="1">
+                <ProgressBar Name="ActivityBar" Grid.ColumnSpan="2" VerticalAlignment="Top" Panel.ZIndex="1"
+                             IsIndeterminate="True" Visibility="Hidden" />
             </Grid>
             <Grid Grid.Row="2" DataContext="{Binding Events}" Margin="0,10,0,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" MaxWidth="600"></ColumnDefinition>
-                    <ColumnDefinition Width="350"></ColumnDefinition>
+                    <ColumnDefinition Width="*" MaxWidth="600" />
+                    <ColumnDefinition Width="350" />
                 </Grid.ColumnDefinitions>
 
-                <ListBox x:Name="lstEvents" Grid.Column="0" ItemsSource="{Binding}" IsSynchronizedWithCurrentItem="True" SelectionChanged="lstEvents_SelectionChanged">
+                <ListBox x:Name="lstEvents" Grid.Column="0" ItemsSource="{Binding}"
+                         IsSynchronizedWithCurrentItem="True" SelectionChanged="lstEvents_SelectionChanged">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="16"/>
-                                    <ColumnDefinition Width="150"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="16" />
+                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="80" />
                                 </Grid.ColumnDefinitions>
 
-                                <Image Grid.Column="0" Source="{Binding Event.EventType, Converter={StaticResource EventTypeToImageConverter}}"></Image>
-                                <TextBlock Grid.Column="1" Text="{Binding Event.StartTime}"></TextBlock>
-                                <TextBlock Grid.Column="2" Text="{Binding Event.DisplayName}"></TextBlock>
-                                <TextBlock Grid.Column="3" Text="{Binding Event.PrimaryMetric}"></TextBlock>
+                                <Image Grid.Column="0"
+                                       Source="{Binding Event.EventType, Converter={StaticResource EventTypeToImageConverter}}" />
+                                <TextBlock Grid.Column="1" Text="{Binding Event.StartTime}" />
+                                <TextBlock Grid.Column="2" Text="{Binding Event.DisplayName}" />
+                                <TextBlock Grid.Column="3" Text="{Binding Event.PrimaryMetric}" />
 
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
 
-                <StackPanel Grid.Column="1" Visibility="{Binding /, Converter={StaticResource NullToVisibilityConverter}, FallbackValue=Collapsed}">
+                <StackPanel Grid.Column="1"
+                            Visibility="{Binding /, Converter={StaticResource NullToVisibilityConverter}, FallbackValue=Collapsed}">
 
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="36"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="36" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
                         </Grid.RowDefinitions>
-                        <Image Grid.Column="0" Grid.Row="0" Source="/assets/activity_details/name.png" Height="32" Width="32"/>
-                        <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Event.Name, TargetNullValue=&lt;No custom name&gt;}" VerticalAlignment="Center"/>
+                        <Image Grid.Column="0" Grid.Row="0" Source="/assets/activity_details/name.png" Height="32"
+                               Width="32" />
+                        <TextBlock Grid.Column="1" Grid.Row="0"
+                                   Text="{Binding Event.Name, TargetNullValue=&lt;No custom name&gt;}"
+                                   VerticalAlignment="Center" />
 
-                        <Image Grid.Column="0" Grid.Row="1" Source="/assets/activity_details/duration.png" Height="32" Width="32"/>
-                        <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Event.Duration}" VerticalAlignment="Center"/>
+                        <Image Grid.Column="0" Grid.Row="1" Source="/assets/activity_details/duration.png" Height="32"
+                               Width="32" />
+                        <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Event.Duration}"
+                                   VerticalAlignment="Center" />
 
-                        <Image Grid.Column="0" Grid.Row="2" Source="/assets/activity_details/calories.png" Height="32" Width="32"/>
-                        <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Event.CaloriesBurned}" VerticalAlignment="Center"/>
+                        <Image Grid.Column="0" Grid.Row="2" Source="/assets/activity_details/calories.png" Height="32"
+                               Width="32" />
+                        <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Event.CaloriesBurned}"
+                                   VerticalAlignment="Center" />
 
-                        <Image Grid.Column="0" Grid.Row="3" Source="/assets/activity_details/heartrate.png" Height="32" Width="32"/>
-                        <TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding Event.HeartRate.Average}" VerticalAlignment="Center"/>
+                        <Image Grid.Column="0" Grid.Row="3" Source="/assets/activity_details/heartrate.png" Height="32"
+                               Width="32" />
+                        <TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding Event.HeartRate.Average}"
+                                   VerticalAlignment="Center" />
                     </Grid>
-                    
-                    <StackPanel Visibility="{Binding Event.EventType, ConverterParameter=Running|Biking, Converter={StaticResource PropValueToVisibilityConverter}}">
-                        <Grid Visibility="{Binding HasGPSPoints, Converter={StaticResource BoolToVisibilityConverter}}" local:DesignHelpers.IsHidden="true" Height="90">
+
+                    <StackPanel
+                        Visibility="{Binding Event.EventType, ConverterParameter=Running|Biking, Converter={StaticResource PropValueToVisibilityConverter}}">
+                        <Grid Visibility="{Binding HasGPSPoints, Converter={StaticResource BoolToVisibilityConverter}}"
+                              local:DesignHelpers.IsHidden="true" Height="90">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="36"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="36" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            
+
                             <Image Grid.Column="0" Source="/assets/activity_details/map_gps.png" Height="32" Width="32" />
                             <StackPanel Grid.Column="1">
-                                <TextBlock TextWrapping="Wrap">Your GPS was on and recording during this activity.<LineBreak/>You can export these points to a generic GPX file which can be opened or imported into a variety of other services.</TextBlock>
-                                <Button Click="btnExportToGPX_Click" Content="Export GPX File" Margin="0,10,220,0"/>
+                                <TextBlock TextWrapping="Wrap">
+                                    Your GPS was on and recording during this activity.
+                                    <LineBreak />You can export these points to a generic GPX file which can be opened or imported into a variety of other services.
+                                </TextBlock>
+                                <Button Click="btnExportToGPX_Click" Content="Export GPX File" Margin="0,10,220,0" />
                             </StackPanel>
                         </Grid>
 
-                        <Grid Visibility="{Binding HasGPSPoints, Converter={StaticResource OppositeBoolToVisibilityConverter}}" Height="40">
+                        <Grid
+                            Visibility="{Binding HasGPSPoints, Converter={StaticResource OppositeBoolToVisibilityConverter}}"
+                            Height="40">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="36"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="36" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            
-                            <Image Grid.Column="0" Source="/assets/activity_details/map_gps.png" Height="32" Width="32"/>
+
+                            <Image Grid.Column="0" Source="/assets/activity_details/map_gps.png" Height="32" Width="32" />
                             <TextBlock Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center">No GPS location points recorded during this activity</TextBlock>
                         </Grid>
 
                         <Grid Height="80">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="36"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="36" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
                             <Image Grid.Column="0" Source="/assets/activity_details/map.png" Height="32" Width="32" />
                             <StackPanel Grid.Column="1">
                                 <TextBlock TextWrapping="Wrap" Margin="0,0,0,0">You can export this activity to a "Training Center XML" (TCX) file.</TextBlock>
-                                <Button Click="btnExportToTCX_Click" Content="Export TCX File" Margin="0,10,220,0"/>
+                                <Button Click="btnExportToTCX_Click" Content="Export TCX File" Margin="0,10,220,0" />
                             </StackPanel>
                         </Grid>
                     </StackPanel>

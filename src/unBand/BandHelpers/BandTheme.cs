@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Microsoft.Band.Admin;
 using Microsoft.Band;
+using Microsoft.Band.Admin;
 using Microsoft.Band.Personalization;
 
 namespace unBand.BandHelpers
@@ -20,37 +17,34 @@ namespace unBand.BandHelpers
     public struct PixelColor
     {
         // 32 bit BGRA 
-        [FieldOffset(0)]
-        public UInt32 ColorBGRA;
+        [FieldOffset(0)] public uint ColorBGRA;
         // 8 bit components
-        [FieldOffset(0)]
-        public byte Blue;
-        [FieldOffset(1)]
-        public byte Green;
-        [FieldOffset(2)]
-        public byte Red;
-        [FieldOffset(3)]
-        public byte Alpha;
+        [FieldOffset(0)] public byte Blue;
+        [FieldOffset(1)] public byte Green;
+        [FieldOffset(2)] public byte Red;
+        [FieldOffset(3)] public byte Alpha;
     }
 
     public class BandTheme : INotifyPropertyChanged
     {
-        private CargoClient _client;
-        private bool _inited;
-
-        private WriteableBitmap _background;
-        private Microsoft.Band.BandTheme _themeColor;
-
-        private SolidColorBrush _baseColor;
-        private SolidColorBrush _highlightColor;
-        private SolidColorBrush _lowlightColor;
-        private SolidColorBrush _mutedColor;
-        private SolidColorBrush _secondaryTextColor;
-        private SolidColorBrush _highContrastColor;
-
         // magic values for the background size (if you pass anything else in you get an exception)
         public static short BACKGROUND_WIDTH = 310;
         public static short BACKGROUND_HEIGHT = 102;
+        private readonly CargoClient _client;
+        private WriteableBitmap _background;
+        private SolidColorBrush _baseColor;
+        private SolidColorBrush _highContrastColor;
+        private SolidColorBrush _highlightColor;
+        private bool _inited;
+        private SolidColorBrush _lowlightColor;
+        private SolidColorBrush _mutedColor;
+        private SolidColorBrush _secondaryTextColor;
+        private Microsoft.Band.BandTheme _themeColor;
+
+        public BandTheme(CargoClient client)
+        {
+            _client = client;
+        }
 
         public WriteableBitmap Background
         {
@@ -68,7 +62,7 @@ namespace unBand.BandHelpers
                         Red = 255,
                         Alpha = 0
                     };
-                    
+
                     // Usually we would just call the below, but that has a bug that switches channels so
                     // all images come out blue tinted, so call our implementation instead
                     //_client.SetMeTileImageAsync(value);
@@ -181,11 +175,6 @@ namespace unBand.BandHelpers
             }
         }
 
-        public BandTheme(CargoClient client)
-        {
-            _client = client;
-        }
-
         public async Task InitAsync()
         {
             // NEEDS BT VERIFICATION IF THIS STILL HAPPENS: check if there is a MeTile to grab (otherwise you get an exception
@@ -199,7 +188,8 @@ namespace unBand.BandHelpers
                 meTileImage = await _client.PersonalizationManager.GetMeTileImageAsync();
             }
             catch (InvalidOperationException)
-            { } // no background image
+            {
+            } // no background image
 
             if (meTileImage != null)
                 _background = meTileImage.ToWriteableBitmap();
@@ -216,16 +206,16 @@ namespace unBand.BandHelpers
         }
 
         /// <summary>
-        /// Break out all of the colors from _themeColor and set the relevant properties
+        ///     Break out all of the colors from _themeColor and set the relevant properties
         /// </summary>
         private void SetColorProperties()
         {
-            BaseColor          = new SolidColorBrush(_themeColor.Base.ToColor());
-            HighlightColor     = new SolidColorBrush(_themeColor.Highlight.ToColor());
-            LowlightColor      = new SolidColorBrush(_themeColor.Lowlight.ToColor());
-            MutedColor         = new SolidColorBrush(_themeColor.Muted.ToColor());
+            BaseColor = new SolidColorBrush(_themeColor.Base.ToColor());
+            HighlightColor = new SolidColorBrush(_themeColor.Highlight.ToColor());
+            LowlightColor = new SolidColorBrush(_themeColor.Lowlight.ToColor());
+            MutedColor = new SolidColorBrush(_themeColor.Muted.ToColor());
             SecondaryTextColor = new SolidColorBrush(_themeColor.SecondaryText.ToColor());
-            HighContrastColor  = new SolidColorBrush(_themeColor.HighContrast.ToColor());
+            HighContrastColor = new SolidColorBrush(_themeColor.HighContrast.ToColor());
         }
 
         /// Known Colors:
@@ -234,20 +224,20 @@ namespace unBand.BandHelpers
         /// Lowlight      : button press highlight
         /// Muted         : unused?
         /// SecondaryText : controls some (literally) random items such as toggles that are off in settings
-        ///                 meeting locations, date received for emails etc.
+        /// meeting locations, date received for emails etc.
         /// High Contrast : Tile background when tile has an unread count (such as email, sms, phone etc.)
         public void UpdateColors()
         {
             if (!_inited) return;
 
             //TODO: all of these properties should be of type Color and the XAML should use a Converter
-            _themeColor.Base          = BaseColor.Color.ToBandColor();
-            _themeColor.Highlight     = HighlightColor.Color.ToBandColor();
-            _themeColor.Lowlight      = LowlightColor.Color.ToBandColor();
-            _themeColor.Muted         = MutedColor.Color.ToBandColor();
+            _themeColor.Base = BaseColor.Color.ToBandColor();
+            _themeColor.Highlight = HighlightColor.Color.ToBandColor();
+            _themeColor.Lowlight = LowlightColor.Color.ToBandColor();
+            _themeColor.Muted = MutedColor.Color.ToBandColor();
             _themeColor.SecondaryText = SecondaryTextColor.Color.ToBandColor();
-            _themeColor.HighContrast  = HighContrastColor.Color.ToBandColor();
- 
+            _themeColor.HighContrast = HighContrastColor.Color.ToBandColor();
+
             _client.SetDeviceThemeAsync(_themeColor);
         }
 
@@ -274,7 +264,7 @@ namespace unBand.BandHelpers
                 // the Band expects a Pbgra32 image, so convert it now
                 var pbgra32Image = new FormatConvertedBitmap(bitmapSource, PixelFormats.Pbgra32, null, 0);
 
-                WriteableBitmap b = new WriteableBitmap(pbgra32Image);
+                var b = new WriteableBitmap(pbgra32Image);
                 Background = b;
             }
         }
@@ -289,14 +279,12 @@ namespace unBand.BandHelpers
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
             {
-                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-                }));
+                Application.Current.Dispatcher.BeginInvoke(
+                    new Action(() => { PropertyChanged(this, new PropertyChangedEventArgs(propertyName)); }));
             }
         }
 

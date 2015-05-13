@@ -1,15 +1,17 @@
 ﻿<UserControl x:Class="unBand.pages.SensorsPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:BandControls="clr-namespace:unBand.Controls"
              xmlns:local="clr-namespace:unBand"
              mc:Ignorable="d" Height="330" Width="529">
 
     <Grid>
-        <BandControls:WaitingForBand Visibility="{Binding IsConnected, ConverterParameter=true, Converter={StaticResource BoolToVisibilityConverter}}" local:DesignHelpers.IsHidden="true"></BandControls:WaitingForBand>
+        <BandControls:WaitingForBand
+            Visibility="{Binding IsConnected, ConverterParameter=true, Converter={StaticResource BoolToVisibilityConverter}}"
+            local:DesignHelpers.IsHidden="true" />
 
         <Grid Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}">
 

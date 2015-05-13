@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using unBand.Cloud.Events;
 using unBand.Cloud.Exporters.EventExporters.Helpers;
 
 namespace unBand.Cloud.Exporters.EventExporters

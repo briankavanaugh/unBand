@@ -1,55 +1,31 @@
-﻿using Microsoft.Band;
-using Microsoft.Band.Admin;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Band.Admin;
 
 namespace unBand.BandHelpers
 {
     public class BandLogger : TraceListenerBase
     {
-
-#region Singleton
-
-        private static BandLogger _theOne;
-
-        public static BandLogger Instance
-        {
-            get
-            {
-                if (_theOne == null)
-                {
-                    _theOne = new BandLogger();
-                }
-
-                return _theOne;
-            }
-        }
-
-
-#endregion
-
+        private string _lastFormattedMessage;
         public ObservableCollection<string> _logOutput = new ObservableCollection<string>();
 
-        public ObservableCollection<string> LogOutput { get { return _logOutput; } }
-
-        public bool CollapseRepeatedMessages { get; set; }
-
-        private string _lastFormattedMessage;
-
-        private BandLogger() 
+        private BandLogger()
         {
             CollapseRepeatedMessages = true;
         }
 
+        public ObservableCollection<string> LogOutput
+        {
+            get { return _logOutput; }
+        }
+
+        public bool CollapseRepeatedMessages { get; set; }
+
         public override void Log(LogLevel level, string message, params object[] args)
         {
-            string newMessage = String.Format(message, args);
+            var newMessage = string.Format(message, args);
 
             if (CollapseRepeatedMessages && newMessage == _lastFormattedMessage)
             {
@@ -60,12 +36,11 @@ namespace unBand.BandHelpers
                     {
                         lock (_logOutput)
                         {
-
                             // essentially, pop the current message, extract the count from the text
                             // and stick it back on with the new count. We could save the count, but there's
                             // no benefit.
 
-                            string repeatedLine = _logOutput[0];
+                            var repeatedLine = _logOutput[0];
                             _logOutput.RemoveAt(0);
 
                             var re = new Regex(@" \((\d+)\)$");
@@ -93,7 +68,7 @@ namespace unBand.BandHelpers
 
             _lastFormattedMessage = newMessage;
 
-            string log = DateTime.Now + ": " + level.ToString() + ": " + newMessage;
+            var log = DateTime.Now + ": " + level + ": " + newMessage;
 
             // Current will be null when shutting down
             if (Application.Current != null)
@@ -112,6 +87,23 @@ namespace unBand.BandHelpers
             }
         }
 
-        
+        #region Singleton
+
+        private static BandLogger _theOne;
+
+        public static BandLogger Instance
+        {
+            get
+            {
+                if (_theOne == null)
+                {
+                    _theOne = new BandLogger();
+                }
+
+                return _theOne;
+            }
+        }
+
+        #endregion
     }
 }

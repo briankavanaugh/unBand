@@ -1,43 +1,45 @@
-﻿using Microsoft.Band;
-using Microsoft.Band.Admin;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
 using System.Windows.Threading;
-using unBand.CargoClientEditor;
+using Microsoft.Band;
+using Microsoft.Band.Admin;
+using unBand.Cloud;
 
 namespace unBand.BandHelpers
 {
-    class BandManager : INotifyPropertyChanged
+    internal class BandManager : INotifyPropertyChanged
     {
+        private static DispatcherTimer _timer;
+        private CargoClient _cargoClient;
+        private IBandInfo _deviceInfo;
+        private bool _isConnected;
+        private bool _isDesktopSyncAppRunning;
+        private BandProperties _properties;
+        private BandSensors _sensors;
+        private BandTheme _theme;
+        private BandTiles _tiles;
+
+        private BandManager()
+        {
+        }
 
         #region Singleton
 
         /// <summary>
-        /// Call BandManager.Start() to kick things off htere
-        /// TODO: Consider an exception if Start() is not called
+        ///     Call BandManager.Start() to kick things off htere
+        ///     TODO: Consider an exception if Start() is not called
         /// </summary>
         public static BandManager Instance { get; private set; }
 
         #endregion
-
-        private bool _isConnected = false;
-        private bool _isDesktopSyncAppRunning = false;
-        private IBandInfo _deviceInfo;
-        private CargoClient _cargoClient;
-        private BandProperties _properties;
-        private BandTheme _theme;
-        private BandSensors _sensors;
-        private BandTiles _tiles;
 
         public bool IsConnected
         {
@@ -66,7 +68,7 @@ namespace unBand.BandHelpers
         }
 
         public CargoClient CargoClient
-        { 
+        {
             get { return _cargoClient; }
             set
             {
@@ -130,10 +132,9 @@ namespace unBand.BandHelpers
             }
         }
 
-        public BandLogger Log { get { return BandLogger.Instance; } }
-
-        private BandManager()
+        public BandLogger Log
         {
+            get { return BandLogger.Instance; }
         }
 
         public static bool CanRun(ref string message)
@@ -142,7 +143,9 @@ namespace unBand.BandHelpers
 
             if (!CargoDll.BandDllsExist(ref msg))
             {
-                message = "Couldn't find the latest Microsoft Band Desktop Sync app.\n\nInstall it from: http://bit.ly/desktopband and try again.\n\nSadly we're going to have to exit now.\n\nDiagnostiscs: " + msg;
+                message =
+                    "Couldn't find the latest Microsoft Band Desktop Sync app.\n\nInstall it from: http://bit.ly/desktopband and try again.\n\nSadly we're going to have to exit now.\n\nDiagnostiscs: " +
+                    msg;
 
                 return false;
             }
@@ -159,7 +162,7 @@ namespace unBand.BandHelpers
             Instance.InitializeCargoLogging();
         }
 
-        static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
             if (args.Name.StartsWith("Microsoft.Band"))
             {
@@ -169,7 +172,8 @@ namespace unBand.BandHelpers
                     var curDir = Directory.GetCurrentDirectory();
                     Directory.SetCurrentDirectory(CargoDll.GetOfficialBandDllPath());
 
-                    var asm = Assembly.LoadFrom(CargoDll.GetUnBandBandDll(args.Name.Substring(0, args.Name.IndexOf(','))));
+                    var asm =
+                        Assembly.LoadFrom(CargoDll.GetUnBandBandDll(args.Name.Substring(0, args.Name.IndexOf(','))));
 
                     Directory.SetCurrentDirectory(curDir);
 
@@ -184,9 +188,7 @@ namespace unBand.BandHelpers
             return null;
         }
 
-        private static DispatcherTimer _timer;
-        
-        public static void Start() 
+        public static void Start()
         {
             if (Instance == null)
                 Create();
@@ -229,17 +231,7 @@ namespace unBand.BandHelpers
             if (DesktopSyncAppIsRunning())
                 return;
 
-            // We support connecting to a device over USB and Bluetooth.
-            // Since USB is super fast (the device is either there or not), search there first and then fallback
-            // on Bluetooth, since that can take a little longer.
-
-            var device = await GetUSBBand();
-
-            if (device == null)
-            {
-                // now try Bluetooth
-                device = await GetBluetoothBand();
-            }
+            var device = await GetUsbBand();
 
             if (device != null)
             {
@@ -258,7 +250,7 @@ namespace unBand.BandHelpers
 
                     Properties = new BandProperties(CargoClient);
                     await Properties.InitAsync();
-                    
+
                     Theme = new BandTheme(CargoClient);
                     await Theme.InitAsync();
 
@@ -274,7 +266,7 @@ namespace unBand.BandHelpers
         private static async Task<IBandInfo[]> GetConnectedDevicesAsync()
         {
             var devices = new List<IBandInfo>();
-            
+
             devices.AddRange(await GetConnectedUSBDevicesAsync());
             devices.AddRange(await GetConnectedBluetoothDevicesAsync());
 
@@ -288,10 +280,11 @@ namespace unBand.BandHelpers
 
         private static async Task<IBandInfo[]> GetConnectedBluetoothDevicesAsync()
         {
-            return new IBandInfo[] {};// Temporary BT removal: await CargoClientExtender.BluetoothClient.GetConnectedDevicesAsync();
+            return new IBandInfo[] {};
+                // Temporary BT removal: await CargoClientExtender.BluetoothClient.GetConnectedDevicesAsync();
         }
 
-        private async Task<CargoClient> GetUSBBand()
+        private async Task<CargoClient> GetUsbBand()
         {
             var devices = await GetConnectedUSBDevicesAsync();
 
@@ -305,45 +298,28 @@ namespace unBand.BandHelpers
             return null;
         }
 
-        private async Task<CargoClient> GetBluetoothBand()
-        {
-            /* temporarily removed until BT can be re-enabled on the new DLLs
-            var btDevices = await GetConnectedBluetoothDevicesAsync();
-
-            if (btDevices != null && btDevices.Length > 0)
-            {
-                _deviceInfo = btDevices[0];
-
-                return await BluetoothClient.CreateAsync(_deviceInfo);
-            }
-            */
-            return null;
-        }
-
         private bool DesktopSyncAppIsRunning()
         {
-            return IsDesktopSyncAppRunning = (System.Diagnostics.Process.GetProcessesByName("Microsoft Band Sync").Length > 0);
+            return IsDesktopSyncAppRunning = (Process.GetProcessesByName("Microsoft Band Sync").Length > 0);
         }
 
         private void InitializeCargoLogging()
         {
             // get log instance
-            var field = typeof(Logger).GetField("traceListenerInternal", BindingFlags.Static | BindingFlags.NonPublic);
+            var field = typeof (Logger).GetField("traceListenerInternal", BindingFlags.Static | BindingFlags.NonPublic);
             field.SetValue(null, BandLogger.Instance);
         }
-        
+
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
             {
-                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-                }));
+                Application.Current.Dispatcher.BeginInvoke(
+                    new Action(() => { PropertyChanged(this, new PropertyChangedEventArgs(propertyName)); }));
             }
         }
 

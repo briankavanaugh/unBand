@@ -1,29 +1,32 @@
 ﻿<UserControl x:Class="unBand.pages.MyBandPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:local="clr-namespace:unBand"
              xmlns:BandControls="clr-namespace:unBand.Controls"
              mc:Ignorable="d" Height="330" Width="529">
 
     <Grid>
-        <BandControls:WaitingForBand Visibility="{Binding IsConnected, ConverterParameter=true, Converter={StaticResource BoolToVisibilityConverter}}" local:DesignHelpers.IsHidden="true"></BandControls:WaitingForBand>
+        <BandControls:WaitingForBand
+            Visibility="{Binding IsConnected, ConverterParameter=true, Converter={StaticResource BoolToVisibilityConverter}}"
+            local:DesignHelpers.IsHidden="true" />
 
         <Grid Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}">
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="120"></RowDefinition>
-                <RowDefinition Height="35"></RowDefinition>
-                <RowDefinition/>
+                <RowDefinition Height="120" />
+                <RowDefinition Height="35" />
+                <RowDefinition />
             </Grid.RowDefinitions>
 
-            <BandControls:BandMeTile Grid.Row="0" MouseUp="BandMeTile_MouseUp" Height="Auto" Margin="0,9,-20,9" Width="Auto"></BandControls:BandMeTile>
+            <BandControls:BandMeTile Grid.Row="0" MouseUp="BandMeTile_MouseUp" Height="Auto" Margin="0,9,-20,9"
+                                     Width="Auto" />
 
             <StackPanel Grid.Row="1" Orientation="Horizontal">
                 <TextBlock FontSize="20">Your Band (</TextBlock>
-                <TextBlock FontSize="20" FontWeight="Bold" Text="{Binding Properties.DeviceName}"></TextBlock>
+                <TextBlock FontSize="20" FontWeight="Bold" Text="{Binding Properties.DeviceName}" />
                 <TextBlock FontSize="20">)</TextBlock>
             </StackPanel>
 
@@ -31,12 +34,15 @@
 
                 <TextBlock TextWrapping="Wrap">
                     <Run FontWeight="Bold">Welcome to unBand!</Run>
-                    <LineBreak/><LineBreak/>
+                    <LineBreak /><LineBreak />
                     This is an unofficial tool for Band enthusiasts that lets you customize your band and access the data that the band has in ways that may not be available through the official app.
-                    <LineBreak/><LineBreak/>
+                    <LineBreak /><LineBreak />
                     Select a category on the area to get started.
-                    <LineBreak/><LineBreak/>
-                    <Hyperlink FontSize="20" NavigateUri="https://github.com/nachmore/unBand/issues" RequestNavigate="Hyperlink_RequestNavigate">Report an issue / Request a Feature / Send Feedback</Hyperlink>
+                    <LineBreak /><LineBreak />
+                    <Hyperlink FontSize="20" NavigateUri="https://github.com/nachmore/unBand/issues"
+                               RequestNavigate="Hyperlink_RequestNavigate">
+                        Report an issue / Request a Feature / Send Feedback
+                    </Hyperlink>
                 </TextBlock>
 
             </StackPanel>

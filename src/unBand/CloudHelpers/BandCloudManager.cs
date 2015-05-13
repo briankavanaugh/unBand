@@ -112,7 +112,8 @@ namespace unBand.CloudHelpers
             }
         }
 
-        private async Task<IEnumerable<BandEventViewModel>> LoadEventsAsync(int? topCount = null, DateTime? startDate = null, DateTime? endDate = null)
+        private async Task<IEnumerable<BandEventViewModel>> LoadEventsAsync(int? topCount = null,
+            DateTime? startDate = null, DateTime? endDate = null)
         {
             return await Task.Run<IEnumerable<BandEventViewModel>>(async () =>
             {
@@ -352,7 +353,7 @@ namespace unBand.CloudHelpers
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
             {

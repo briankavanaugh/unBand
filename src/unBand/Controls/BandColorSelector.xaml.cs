@@ -1,24 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using unBand.BandHelpers;
 using Xceed.Wpf.Toolkit;
 
 namespace unBand.Controls
 {
     /// <summary>
-    /// Interaction logic for BandColorSelector.xaml
+    ///     Interaction logic for BandColorSelector.xaml
     /// </summary>
     public partial class BandColorSelector : UserControl
     {
@@ -26,7 +16,7 @@ namespace unBand.Controls
         {
             InitializeComponent();
         }
-        
+
         private void Color_MouseUp(object sender, MouseButtonEventArgs e)
         {
             var border = sender as Border;
@@ -49,7 +39,7 @@ namespace unBand.Controls
         {
             // swallow this event so that it is not forwarded to our parent (who would reopen the picker if
             // the user selected the currently selected color)
-            
+
             e.Handled = true;
         }
     }

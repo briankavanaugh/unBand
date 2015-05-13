@@ -1,32 +1,20 @@
-﻿using Microsoft.Band;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using unBand.BandHelpers;
-using MahApps.Metro.Controls.Dialogs;
 using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Win32;
+using unBand.BandHelpers;
 
 namespace unBand.pages
 {
     /// <summary>
-    /// Interaction logic for MyBandPage.xaml
+    ///     Interaction logic for MyBandPage.xaml
     /// </summary>
     public partial class TilesPage : UserControl
     {
-
-        private BandManager _band;
+        private readonly BandManager _band;
 
         public TilesPage()
         {
@@ -40,13 +28,13 @@ namespace unBand.pages
         // Drag & Drop care of http://stackoverflow.com/a/4004590
         private void ListBox_Drop(object sender, DragEventArgs e)
         {
-            ListBox parent = sender as ListBox;
-            BandStrapp data = e.Data.GetData(typeof(BandStrapp)) as BandStrapp;
-            BandStrapp objectToPlaceBefore = GetObjectDataFromPoint(parent, e.GetPosition(parent)) as BandStrapp;
+            var parent = sender as ListBox;
+            var data = e.Data.GetData(typeof (BandStrapp)) as BandStrapp;
+            var objectToPlaceBefore = GetObjectDataFromPoint(parent, e.GetPosition(parent)) as BandStrapp;
 
             if (data != null && objectToPlaceBefore != null)
             {
-                int index = _band.Tiles.Strip.IndexOf(objectToPlaceBefore);
+                var index = _band.Tiles.Strip.IndexOf(objectToPlaceBefore);
 
                 _band.Tiles.Strip.Remove(data);
                 _band.Tiles.Strip.Insert(index, data);
@@ -56,9 +44,9 @@ namespace unBand.pages
 
         private void ListBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ListBox parent = sender as ListBox;
+            var parent = sender as ListBox;
 
-            BandStrapp data = GetObjectDataFromPoint(parent, e.GetPosition(parent)) as BandStrapp;
+            var data = GetObjectDataFromPoint(parent, e.GetPosition(parent)) as BandStrapp;
 
             if (data != null)
             {
@@ -68,10 +56,10 @@ namespace unBand.pages
 
         private static object GetObjectDataFromPoint(ListBox source, Point point)
         {
-            UIElement element = source.InputHitTest(point) as UIElement;
+            var element = source.InputHitTest(point) as UIElement;
             if (element != null)
             {
-                object data = DependencyProperty.UnsetValue;
+                var data = DependencyProperty.UnsetValue;
 
                 while (data == DependencyProperty.UnsetValue)
                 {
@@ -103,9 +91,8 @@ namespace unBand.pages
 
         private async void linkCustomInformation_Click(object sender, RoutedEventArgs e)
         {
-
-            await ((MetroWindow)(Window.GetWindow(this))).ShowMessageAsync("Custom Tile Icons",
-@"For best results, use a single color, transparent 46x46 image. 
+            await ((MetroWindow) (Window.GetWindow(this))).ShowMessageAsync("Custom Tile Icons",
+                @"For best results, use a single color, transparent 46x46 image. 
 
 Any non-transparent pixels will be converted to white on the Band, so an image without transparency will just show up as a white box.
 ");
@@ -113,18 +100,18 @@ Any non-transparent pixels will be converted to white on the Band, so an image w
 
         private void btnCustomizeIcon_Click(object sender, RoutedEventArgs e)
         {
-            var bandStrapp = ((Button)sender).DataContext as BandStrapp;
+            var bandStrapp = ((Button) sender).DataContext as BandStrapp;
 
             var dialog = new OpenFileDialog();
             dialog.Filter = "Images|*.jpg;*.jpeg;*.png";
 
             if (dialog.ShowDialog() == true)
             {
-                Telemetry.TrackEvent(TelemetryCategory.Theme, Telemetry.TelemetryEvent.ChangeStrappIcon, bandStrapp.Strapp.Name);
+                Telemetry.TrackEvent(TelemetryCategory.Theme, Telemetry.TelemetryEvent.ChangeStrappIcon,
+                    bandStrapp.Strapp.Name);
 
                 bandStrapp.SetIcon(dialog.FileName);
             }
-
         }
     }
 }

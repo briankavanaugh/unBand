@@ -1,30 +1,30 @@
 ﻿<UserControl x:Class="unBand.pages.AboutPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              x:Name="this"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="500">
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="40" />
+            <RowDefinition />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Image VerticalAlignment="Center" Source="/band.ico" Height="32" Width="32" Stretch="Uniform"></Image>
+            <Image VerticalAlignment="Center" Source="/band.ico" Height="32" Width="32" Stretch="Uniform" />
             <TextBlock VerticalAlignment="Bottom">
-                <Run FontSize="30">unBand&#160;&#160;&#160;&#160;</Run><Run></Run>
-                Version <Run Text="{Binding Version, Mode=OneTime}"></Run>
+                <Run FontSize="30">unBand&#160;&#160;&#160;&#160;</Run><Run />
+                Version <Run Text="{Binding Version, Mode=OneTime}" />
             </TextBlock>
         </StackPanel>
 
         <ScrollViewer Margin="0,20,0,0" Grid.Row="1">
             <StackPanel>
-                <TextBlock FontWeight="Bold" FontSize="18" Text="{Binding Path=Heading, ElementName=this}"></TextBlock>
+                <TextBlock FontWeight="Bold" FontSize="18" Text="{Binding Path=Heading, ElementName=this}" />
 
                 <RichTextBox Background="Transparent" IsReadOnly="True" Margin="0,10,0,0" BorderBrush="Transparent">
                     <FlowDocument x:Name="flowAbout">
@@ -146,7 +146,10 @@
         </ScrollViewer>
 
         <TextBlock Margin="0,5,0,0" Grid.Row="2">
-            <Hyperlink FontSize="15" NavigateUri="https://github.com/nachmore/unBand/issues" RequestNavigate="Hyperlink_RequestNavigate">Report an issue / Request a Feature / Send Feedback</Hyperlink>
+            <Hyperlink FontSize="15" NavigateUri="https://github.com/nachmore/unBand/issues"
+                       RequestNavigate="Hyperlink_RequestNavigate">
+                Report an issue / Request a Feature / Send Feedback
+            </Hyperlink>
         </TextBlock>
 
     </Grid>

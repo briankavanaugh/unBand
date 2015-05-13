@@ -1,33 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-using unBand.Cloud;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
-using System.Reflection;
+using unBand.Cloud;
 
 namespace unBand.pages
 {
     /// <summary>
-    /// Interaction logic for AboutPage.xaml
+    ///     Interaction logic for AboutPage.xaml
     /// </summary>
     public partial class SettingsPage : UserControl, INotifyPropertyChanged
     {
         private string _heading;
+
+        public SettingsPage(bool updated = false)
+        {
+            InitializeComponent();
+
+            DataContext = About.Current;
+
+            Heading = updated ? "unBand has been updated! Here's what you got:" : "Changelog";
+        }
+
         public string Heading
         {
             get { return _heading; }
@@ -42,43 +42,19 @@ namespace unBand.pages
             }
         }
 
-        public SettingsPage(bool updated = false)
-        {
-            InitializeComponent();
-
-            this.DataContext = About.Current;
-
-            Heading = updated ? "unBand has been updated! Here's what you got:" : "Changelog";
-        }
-
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
         }
 
-        #region INotifyPropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-                }));
-            }
-        }
-
-        #endregion
-
         private async void ButtonClearLoginInfo_Click(object sender, RoutedEventArgs e)
         {
             new BandCloudClient().Logout();
 
-            await ((MetroWindow)(Window.GetWindow(this))).ShowMessageAsync("Restart Required", "We'll now restart unBand to flush your login session...");
+            await
+                ((MetroWindow) (Window.GetWindow(this))).ShowMessageAsync("Restart Required",
+                    "We'll now restart unBand to flush your login session...");
 
             Relaunch();
         }
@@ -87,7 +63,7 @@ namespace unBand.pages
         private void Relaunch()
         {
             Process rv = null;
-            ProcessStartInfo processInfo = new ProcessStartInfo(Assembly.GetExecutingAssembly().CodeBase);
+            var processInfo = new ProcessStartInfo(Assembly.GetExecutingAssembly().CodeBase);
 
             // relaunch with runas to get elevated
             processInfo.UseShellExecute = true;
@@ -103,7 +79,19 @@ namespace unBand.pages
             }
         }
 
+        #region INotifyPropertyChanged
 
+        public event PropertyChangedEventHandler PropertyChanged;
 
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                Application.Current.Dispatcher.BeginInvoke(
+                    new Action(() => { PropertyChanged(this, new PropertyChangedEventArgs(propertyName)); }));
+            }
+        }
+
+        #endregion
     }
 }

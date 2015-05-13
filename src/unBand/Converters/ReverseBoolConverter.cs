@@ -1,29 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+using System.Globalization;
 using System.Windows.Data;
 
 namespace unBand
 {
-    class ReverseBoolConverter : IValueConverter
+    internal class ReverseBoolConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-
-            bool? source = value as bool?;
+            var source = value as bool?;
 
             if (source == null)
             {
                 return true;
             }
 
-            return !(bool)source;
+            return !(bool) source;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

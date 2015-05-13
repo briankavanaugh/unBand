@@ -1,27 +1,29 @@
-﻿using Microsoft.Band.Admin;
-using Microsoft.Band.Admin.Streaming;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
+using Microsoft.Band.Admin;
+using Microsoft.Band.Admin.Streaming;
 
 namespace unBand.BandHelpers
 {
     /// <summary>
-    /// Used to extract a bunch of static(ish) properties from a device so that we can bind against the values
+    ///     Used to extract a bunch of static(ish) properties from a device so that we can bind against the values
     /// </summary>
-    class BandProperties : INotifyPropertyChanged
+    internal class BandProperties : INotifyPropertyChanged
     {
-        private CargoClient _client;
-
+        private readonly CargoClient _client;
         private string _deviceName;
-        private byte _percentCharge;
-        private System.Timers.Timer _timeUpdater;
         private DateTime _deviceTime;
+        private byte _percentCharge;
+        private Timer _timeUpdater;
+
+        internal BandProperties(CargoClient client)
+        {
+            _client = client;
+        }
 
         public string DeviceName
         {
@@ -58,56 +60,34 @@ namespace unBand.BandHelpers
                 // properties of _deviceTime
 
                 _deviceTime = value;
-                
+
                 NotifyPropertyChanged();
             }
-        }
-        
-        #region Non-Changing Properties
-
-        public string PermanentSerialNumber { get; private set; }
-        public string ProductSerialNumber { get; private set; }
-        public bool IsValidFirmware { get; private set; }
-        public FirmwareVersions FirmwareVersions { get; private set; }
-        public EphemerisCoverageDates EphemerisCoverageDates { get; private set; }
-        public UInt16 LogVersion { get; private set; }
-        public UInt32 MaxStrappCount { get; private set; } // TODO: can this be set? There is no function to do this, but there are generic property dictionaries
-        public long PendingDeviceDataBytes { get; private set; }
-        public string RunningAppType { get; private set; }
-        public UInt32 TimeZonesDataVersion { get; private set; }
-
-        public Guid DeviceId { get; private set; }
-
-        #endregion
-
-        internal BandProperties(CargoClient client)
-        {
-            _client = client;
         }
 
         public async Task InitAsync()
         {
             PermanentSerialNumber = await _client.GetPermanentSerialNumberAsync();
-            ProductSerialNumber   = await _client.GetProductSerialNumberAsync();
+            ProductSerialNumber = await _client.GetProductSerialNumberAsync();
 
-            IsValidFirmware  = await _client.GetFirmwareBinariesValidationStatusAsync();
+            IsValidFirmware = await _client.GetFirmwareBinariesValidationStatusAsync();
             FirmwareVersions = await _client.GetFirmwareVersionsAsync();
             EphemerisCoverageDates = await _client.GetGpsEphemerisCoverageDatesFromDeviceAsync();
             LogVersion = await _client.GetLogVersionAsync();
             MaxStrappCount = await _client.GetMaxTileCountAsync();
-            
+
             PendingDeviceDataBytes = await _client.GetPendingDeviceDataBytesAsync();
             // var j = await _client.GetPendingLocalDataBytesAsync(); NullException
             RunningAppType = (await _client.GetRunningAppAsync()).ToString();
             TimeZonesDataVersion = await _client.GetTimeZonesDataVersionFromDeviceAsync();
 
-            await _client.SensorSubscribeAsync(SensorType.BatteryGauge); 
+            await _client.SensorSubscribeAsync(SensorType.BatteryGauge);
             _client.BatteryGaugeUpdated += _client_BatteryGaugeUpdated;
 
             _client.BatteryUpdated += _client_BatteryUpdated;
 
             var userProfile = await _client.GetUserProfileFromDeviceAsync();
-            
+
             DeviceName = userProfile.DeviceSettings.DeviceName;
             DeviceId = userProfile.DeviceSettings.DeviceId;
 
@@ -120,7 +100,7 @@ namespace unBand.BandHelpers
             // the band is in UTC (as per the function name) while the timeZone is a collection of properties
             // with the actual time zone represented as a raw string...
             var timeZone = await _client.GetDeviceTimeZoneAsync();
-            var time     = await _client.GetDeviceUtcTimeAsync();
+            var time = await _client.GetDeviceUtcTimeAsync();
 
             // ... luckily we have the "ZoneOffsetMinutes" property which can be used to offset the time to the correct time that is displayed on the band.
             time = time.AddMinutes(timeZone.ZoneOffsetMinutes);
@@ -129,13 +109,13 @@ namespace unBand.BandHelpers
 
             // start a timer to update the current time (we cheat by using a local timer
             // instead of polling the device)
-            _timeUpdater = new System.Timers.Timer();
+            _timeUpdater = new Timer();
             _timeUpdater.Elapsed += _timeUpdater_Elapsed;
-            _timeUpdater.Interval = (60 - time.Second) * 1000;
+            _timeUpdater.Interval = (60 - time.Second)*1000;
             _timeUpdater.Start();
         }
 
-        void _timeUpdater_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void _timeUpdater_Elapsed(object sender, ElapsedEventArgs e)
         {
             // first trigger
             if (!_timeUpdater.AutoReset)
@@ -144,7 +124,7 @@ namespace unBand.BandHelpers
                 _timeUpdater.AutoReset = true;
                 _timeUpdater.Start();
             }
-            
+
             DeviceTime = _deviceTime.AddMinutes(1);
         }
 
@@ -156,31 +136,49 @@ namespace unBand.BandHelpers
             {
                 _client.SensorUnsubscribe(SensorType.BatteryGauge);
             }
-            catch { } // this will throw if the user disconnected their band from the machine before exiting
+            catch
+            {
+            } // this will throw if the user disconnected their band from the machine before exiting
         }
 
-        void _client_BatteryUpdated(object sender, BatteryUpdatedEventArgs e)
+        private void _client_BatteryUpdated(object sender, BatteryUpdatedEventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        void _client_BatteryGaugeUpdated(object sender, BatteryGaugeUpdatedEventArgs e)
+        private void _client_BatteryGaugeUpdated(object sender, BatteryGaugeUpdatedEventArgs e)
         {
             BatteryPercentageCharge = e.PercentCharge;
         }
+
+        #region Non-Changing Properties
+
+        public string PermanentSerialNumber { get; private set; }
+        public string ProductSerialNumber { get; private set; }
+        public bool IsValidFirmware { get; private set; }
+        public FirmwareVersions FirmwareVersions { get; private set; }
+        public EphemerisCoverageDates EphemerisCoverageDates { get; private set; }
+        public ushort LogVersion { get; private set; }
+        public uint MaxStrappCount { get; private set; }
+        // TODO: can this be set? There is no function to do this, but there are generic property dictionaries
+        public long PendingDeviceDataBytes { get; private set; }
+        public string RunningAppType { get; private set; }
+        public uint TimeZonesDataVersion { get; private set; }
+
+        public Guid DeviceId { get; private set; }
+
+        #endregion
 
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
             {
-                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-                }));
+                Application.Current.Dispatcher.BeginInvoke(
+                    new Action(() => { PropertyChanged(this, new PropertyChangedEventArgs(propertyName)); }));
             }
         }
 

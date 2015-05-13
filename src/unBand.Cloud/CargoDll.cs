@@ -1,19 +1,15 @@
-﻿using Microsoft.Win32;
-using Mono.Cecil;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Principal;
+using Microsoft.Win32;
+using Mono.Cecil;
 
-namespace unBand.CargoClientEditor
+namespace unBand.Cloud
 {
     public static class CargoDll
     {
-
-        private static List<string> _bandDlls = new List<string>()
+        private static readonly List<string> _bandDlls = new List<string>
         {
             "Microsoft.Band.Admin.Desktop",
             "Microsoft.Band.Admin",
@@ -37,7 +33,7 @@ namespace unBand.CargoClientEditor
             return true;
         }
 
-        public static string GetUnBandBandDll(string dllName, string outputPath = null) 
+        public static string GetUnBandBandDll(string dllName, string outputPath = null)
         {
             if (outputPath == null)
             {
@@ -67,9 +63,8 @@ namespace unBand.CargoClientEditor
             foreach (var dllName in _bandDlls)
             {
                 GetUnBandBandDll(dllName, unbandBandDllPath);
-
             }
-            
+
             return unbandBandDllPath;
         }
 
@@ -105,7 +100,8 @@ namespace unBand.CargoClientEditor
                         }
                     }
                 }
-                else if (type.Name == "CargoStreamReader" || type.Name == "CargoStreamWriter" || type.Name == "BufferServer")
+                else if (type.Name == "CargoStreamReader" || type.Name == "CargoStreamWriter" ||
+                         type.Name == "BufferServer")
                 {
                     foreach (var method in type.Methods)
                     {
@@ -125,7 +121,7 @@ namespace unBand.CargoClientEditor
 
                 return assembly.Name.Version.ToString();
             }
-            catch 
+            catch
             {
                 return "Invalid DLL";
             }
@@ -145,23 +141,24 @@ namespace unBand.CargoClientEditor
         public static string GetOfficialBandDllPath()
         {
             // let's try and find the dll
-            var dllLocations = new List<string>()
-                {
-                    GetDllLocationFromRegistry(),
+            var dllLocations = new List<string>
+            {
+                GetDllLocationFromRegistry(),
 
-                    // fallback path
-                    Path.Combine(GetProgramFilesx86(), "Microsoft Band Sync")
-                };
+                // fallback path
+                Path.Combine(GetProgramFilesx86(), "Microsoft Band Sync")
+            };
 
-            string errors = "";
+            var errors = "";
 
-            foreach (string path in dllLocations)
+            foreach (var path in dllLocations)
             {
                 if (IsValidBandDesktopAppPath(path, ref errors))
                     return path;
             }
 
-            throw new FileNotFoundException("Could not find Band Sync app on your machine. I looked in:\n\n" + string.Join("\n", dllLocations) + "\n\nExtra errors:\n" + errors);
+            throw new FileNotFoundException("Could not find Band Sync app on your machine. I looked in:\n\n" +
+                                            string.Join("\n", dllLocations) + "\n\nExtra errors:\n" + errors);
         }
 
         private static bool IsValidBandDesktopAppPath(string path, ref string message)
@@ -185,11 +182,12 @@ namespace unBand.CargoClientEditor
 
         private static string GetDllLocationFromRegistry()
         {
-            var sid = System.Security.Principal.WindowsIdentity.GetCurrent().User.ToString();
+            var sid = WindowsIdentity.GetCurrent().User.ToString();
 
-            var regRoot = Microsoft.Win32.RegistryHive.LocalMachine;
-            string regKeyName = @"SOFTWARE\MICROSOFT\Windows\CurrentVersion\Installer\UserData\" + sid + @"\Components\23439AC101C46D55BBCE6A082085E137";
-            string regValueName = "6A5C0F782DABC24499D24EB7E14D7951";
+            var regRoot = RegistryHive.LocalMachine;
+            var regKeyName = @"SOFTWARE\MICROSOFT\Windows\CurrentVersion\Installer\UserData\" + sid +
+                             @"\Components\23439AC101C46D55BBCE6A082085E137";
+            var regValueName = "6A5C0F782DABC24499D24EB7E14D7951";
 
             RegistryKey regKey;
 

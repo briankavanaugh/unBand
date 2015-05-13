@@ -1,26 +1,23 @@
-﻿using Microsoft.Band.Admin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
+using Microsoft.Band.Admin;
 
 namespace unBand.BandHelpers
 {
-    class BandTiles
+    internal class BandTiles
     {
-        private CargoClient _client;
-
-        public ObservableCollection<BandStrapp> Strip { get; private set; }
-
-        public List<AdminBandTile> DefaultStrapps { get; private set; }
+        private readonly CargoClient _client;
 
         public BandTiles(CargoClient client)
         {
             _client = client;
         }
+
+        public ObservableCollection<BandStrapp> Strip { get; private set; }
+        public List<AdminBandTile> DefaultStrapps { get; private set; }
 
         public async Task InitAsync()
         {
@@ -39,10 +36,10 @@ namespace unBand.BandHelpers
 
             // move the StartStrip into a ObservableCollection so that it can be easily manipulated
             var bandStrip = strip.Select(i => new BandStrapp(this, i));
-            
+
             Strip = new ObservableCollection<BandStrapp>(bandStrip);
 
-            DefaultStrapps = (List<AdminBandTile>)(await _client.GetDefaultTilesAsync());
+            DefaultStrapps = (List<AdminBandTile>) (await _client.GetDefaultTilesAsync());
         }
 
         public Task Save()
@@ -52,7 +49,6 @@ namespace unBand.BandHelpers
 
             return _client.SetStartStripAsync(strip);
         }
-
 
         public async Task ClearAllCounts()
         {
@@ -70,7 +66,6 @@ namespace unBand.BandHelpers
             // it will shove the updated Tile at the end of the strip, which is undesirable
             // so let's resave the strip so that the tiles go back to the same location
             Save();
-                
         }
     }
 }

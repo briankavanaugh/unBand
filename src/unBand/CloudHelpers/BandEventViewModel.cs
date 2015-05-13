@@ -1,20 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using unBand.Cloud;
+using unBand.Cloud.Events;
 
 namespace unBand.CloudHelpers
 {
-    public class BandEventViewModel :INotifyPropertyChanged
+    public class BandEventViewModel : INotifyPropertyChanged
     {
+        private readonly BandCloudClient _cloud;
+        private bool _hasGPSPoints;
+        private bool _loaded;
+
+        public BandEventViewModel(BandCloudClient cloud, BandEventBase cloudEvent)
+        {
+            _cloud = cloud;
+
+            Event = cloudEvent;
+
+            if (Event is UserDailyActivity)
+            {
+                // this event type is considered "Loaded" already since we get all of the information
+                // from the initial API call
+                Loaded = true;
+            }
+        }
+
         public BandEventBase Event { get; private set; }
 
-        private bool _hasGPSPoints = false;
         public bool HasGPSPoints
         {
             get { return _hasGPSPoints; }
@@ -28,9 +43,6 @@ namespace unBand.CloudHelpers
             }
         }
 
-        private BandCloudClient _cloud;
-        private bool _loaded = false;
-
         public bool Loaded
         {
             get { return _loaded; }
@@ -41,20 +53,6 @@ namespace unBand.CloudHelpers
                     _loaded = value;
                     NotifyPropertyChanged();
                 }
-            }
-        }
-
-        public BandEventViewModel(BandCloudClient cloud, BandEventBase cloudEvent)
-        {
-            _cloud = cloud;
-
-            Event = cloudEvent;
-
-            if (Event is UserDailyActivity)
-            {
-                // this event type is considered "Loaded" already since we get all of the information
-                // from the initial API call
-                Loaded = true;
             }
         }
 
@@ -79,18 +77,15 @@ namespace unBand.CloudHelpers
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
             {
-                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-                }));
+                Application.Current.Dispatcher.BeginInvoke(
+                    new Action(() => { PropertyChanged(this, new PropertyChangedEventArgs(propertyName)); }));
             }
         }
 
         #endregion
-
     }
 }

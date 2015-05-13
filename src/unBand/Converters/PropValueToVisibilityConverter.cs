@@ -1,23 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
 namespace unBand
 {
-    class PropValueToVisibilityConverter : IValueConverter
+    internal class PropValueToVisibilityConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             // covers the null case
-            if (value == null) 
+            if (value == null)
             {
                 return (parameter == null ? Visibility.Visible : Visibility.Collapsed);
-            } 
-            else if (parameter == null)
+            }
+            if (parameter == null)
             {
                 return Visibility.Collapsed;
             }
@@ -27,7 +24,7 @@ namespace unBand
 
             if (strParameter.Contains("|"))
             {
-                var parameters = strParameter.Split(new char[] {'|'});
+                var parameters = strParameter.Split('|');
 
                 foreach (var singleParam in parameters)
                 {
@@ -39,7 +36,7 @@ namespace unBand
             return (strValue == strParameter ? Visibility.Visible : Visibility.Collapsed);
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
