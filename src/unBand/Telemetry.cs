@@ -24,7 +24,7 @@ namespace unBand
 
         private static void Init()
         {
-            _session = new AnalyticsSession("http://unband.nachmore.com/app", "UA-56820272-3");
+            _session = new AnalyticsSession("http://jonathanrobson.com", "UA-62913302-1");
 
             var props = Settings.Current;
 
