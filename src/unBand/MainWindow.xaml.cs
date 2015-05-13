@@ -131,11 +131,6 @@ namespace unBand
             Settings.Current.Save();
         }
 
-        private void ButtonLog_Click(object sender, RoutedEventArgs e)
-        {
-            PageContent.Content = new LogOutputPage();
-        }
-
         private void ButtonTiles_Click(object sender, RoutedEventArgs e)
         {
             PageContent.Content = new TilesPage();

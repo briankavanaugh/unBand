@@ -232,9 +232,6 @@
     <Compile Include="pages\TilesPage.xaml.cs">
       <DependentUpon>TilesPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="pages\LogOutputPage.xaml.cs">
-      <DependentUpon>LogOutputPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Telemetry.cs" />
     <Compile Include="About.cs" />
@@ -292,10 +289,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="pages\TilesPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="pages\LogOutputPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
