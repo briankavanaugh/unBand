@@ -111,11 +111,6 @@ namespace unBand
             PageContent.Content = new MyBandPage();
         }
 
-        private void ButtonTheme_Click(object sender, RoutedEventArgs e)
-        {
-            PageContent.Content = new ThemePage();
-        }
-
         public void Navigate(UserControl content)
         {
             PageContent.Content = content;

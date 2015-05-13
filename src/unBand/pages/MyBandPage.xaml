@@ -21,7 +21,7 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <BandControls:BandMeTile Grid.Row="0" MouseUp="BandMeTile_MouseUp" Height="Auto" Margin="0,9,-20,9"
+            <BandControls:BandMeTile Grid.Row="0" Height="Auto" Margin="0,9,-20,9"
                                      Width="Auto" />
 
             <StackPanel Grid.Row="1" Orientation="Horizontal">

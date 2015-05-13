@@ -292,19 +292,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="pages\ThemePage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="pages\MyBandPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="pages\ThemePage.xaml.cs">
-      <DependentUpon>ThemePage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="pages\MyBandPage.xaml.cs">
       <DependentUpon>MyBandPage.xaml</DependentUpon>
     </Compile>

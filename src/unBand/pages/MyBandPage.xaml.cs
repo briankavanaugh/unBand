@@ -23,13 +23,6 @@ namespace unBand.pages
             DataContext = _band;
         }
 
-        private void BandMeTile_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            // TODO: this whole paradigm is horrible
-            var parentWindow = Window.GetWindow(this);
-            ((MainWindow) (parentWindow)).Navigate(new ThemePage());
-        }
-
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
