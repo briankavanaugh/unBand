@@ -34,9 +34,6 @@
                     x:Name="test">
                 <Image Source="/assets/icons/band.png" Height="24" Width="24" />
             </Button>
-            <Button Style="{DynamicResource MenuImageButton}" ToolTip="Manage Tiles" Click="ButtonTiles_Click">
-                <Image Source="/assets/icons/tiles.png" Height="36" Width="36" />
-            </Button>
             <Button Style="{DynamicResource MenuImageButton}" ToolTip="Activity Data" Click="ButtonActivityLog_Click">
                 <Image Source="/assets/icons/export.png" Height="36" Width="36" />
             </Button>

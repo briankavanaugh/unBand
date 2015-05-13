@@ -229,9 +229,6 @@
     <Compile Include="pages\ActivityLogPage.xaml.cs">
       <DependentUpon>ActivityLogPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="pages\TilesPage.xaml.cs">
-      <DependentUpon>TilesPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Telemetry.cs" />
     <Compile Include="About.cs" />
@@ -285,10 +282,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="pages\ActivityLogPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="pages\TilesPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
