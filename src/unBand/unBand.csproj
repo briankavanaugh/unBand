@@ -296,10 +296,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="pages\SensorsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="pages\MyBandPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -308,9 +304,6 @@
   <ItemGroup>
     <Compile Include="pages\ThemePage.xaml.cs">
       <DependentUpon>ThemePage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="pages\SensorsPage.xaml.cs">
-      <DependentUpon>SensorsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="pages\MyBandPage.xaml.cs">
       <DependentUpon>MyBandPage.xaml</DependentUpon>

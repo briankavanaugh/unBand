@@ -116,11 +116,6 @@ namespace unBand
             PageContent.Content = new ThemePage();
         }
 
-        private void ButtonSensors_Click(object sender, RoutedEventArgs e)
-        {
-            PageContent.Content = new SensorsPage();
-        }
-
         public void Navigate(UserControl content)
         {
             PageContent.Content = content;
