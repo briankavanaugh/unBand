@@ -151,8 +151,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BandHelpers\BandLogger.cs" />
-    <Compile Include="BandHelpers\BandStrapp.cs" />
-    <Compile Include="BandHelpers\BandTiles.cs" />
     <Compile Include="Controls\WaitingForMSA.xaml.cs">
       <DependentUpon>WaitingForMSA.xaml</DependentUpon>
     </Compile>
@@ -161,9 +159,6 @@
     <Compile Include="Converters\ReverseBoolConverter.cs" />
     <Compile Include="Converters\OppositeBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\PropValueToVisibilityConverter.cs" />
-    <Compile Include="Controls\WaitingForBand.xaml.cs">
-      <DependentUpon>WaitingForBand.xaml</DependentUpon>
-    </Compile>
     <Compile Include="CloudHelpers\BandEventViewModel.cs" />
     <Compile Include="CloudHelpers\BandCloudManager.cs" />
     <Compile Include="CloudHelpers\CloudDataExporterSettings.cs" />
@@ -180,21 +175,9 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Telemetry.cs" />
     <Compile Include="About.cs" />
-    <Page Include="Controls\BandColorSelector.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\BandMeTile.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\WaitingForMSA.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\WaitingForBand.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -205,17 +188,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BandHelpers\BandManager.cs" />
-    <Compile Include="BandHelpers\BandProperties.cs" />
-    <Compile Include="BandHelpers\BandSensors.cs" />
-    <Compile Include="BandHelpers\BandTheme.cs" />
-    <Compile Include="BandHelpers\Sensors\BandPedometer.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Controls\BandColorSelector.xaml.cs">
-      <DependentUpon>BandColorSelector.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\BandMeTile.xaml.cs">
-      <DependentUpon>BandMeTile.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DesignHelpers.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

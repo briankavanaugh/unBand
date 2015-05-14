@@ -93,7 +93,7 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" TargetName="Background" Value="#bdb7f9" />
+                                    <Setter Property="Background" TargetName="Background" Value="#87cefa" />
                                     <Setter Property="Visibility" TargetName="Chevron" Value="Visible" />
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="True">

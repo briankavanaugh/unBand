@@ -22,10 +22,6 @@ namespace unBand.BandHelpers
         private IBandInfo _deviceInfo;
         private bool _isConnected;
         private bool _isDesktopSyncAppRunning;
-        private BandProperties _properties;
-        private BandSensors _sensors;
-        private BandTheme _theme;
-        private BandTiles _tiles;
 
         private BandManager()
         {
@@ -80,63 +76,6 @@ namespace unBand.BandHelpers
             }
         }
 
-        public BandProperties Properties
-        {
-            get { return _properties; }
-            set
-            {
-                if (_properties != value)
-                {
-                    _properties = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
-        public BandTheme Theme
-        {
-            get { return _theme; }
-            set
-            {
-                if (_theme != value)
-                {
-                    _theme = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
-        public BandSensors Sensors
-        {
-            get { return _sensors; }
-            set
-            {
-                if (_sensors != value)
-                {
-                    _sensors = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
-        public BandTiles Tiles
-        {
-            get { return _tiles; }
-            set
-            {
-                if (_tiles != value)
-                {
-                    _tiles = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
-        public BandLogger Log
-        {
-            get { return BandLogger.Instance; }
-        }
-
         public static bool CanRun(ref string message)
         {
             string msg = null;
@@ -159,7 +98,7 @@ namespace unBand.BandHelpers
 
             Instance = new BandManager();
 
-            Instance.InitializeCargoLogging();
+            InitializeCargoLogging();
         }
 
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
@@ -196,8 +135,7 @@ namespace unBand.BandHelpers
             // While I don't love the whole Interval = 1ms thing, it simply means that we trigger the first run immediately
             // TODO: Since this could potentially cause race conditions if someone really wanted to garauntee order
             //       of execution we could split out object creation from Start().
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromMilliseconds(1);
+            _timer = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(1)};
 
             _timer.Tick += async (sender, e) =>
             {
@@ -212,7 +150,7 @@ namespace unBand.BandHelpers
                     // make sure we still have the current device
                     var devices = await GetConnectedDevicesAsync();
 
-                    if (!devices.Any(i => i.Name == Instance._deviceInfo.Name))
+                    if (devices.All(i => i.Name != Instance._deviceInfo.Name))
                     {
                         Instance.IsConnected = false;
                     }
@@ -236,29 +174,12 @@ namespace unBand.BandHelpers
             if (device != null)
             {
                 // since this will trigger binding, invoke on the UI thread
-                Application.Current.Dispatcher.BeginInvoke(new Action(async () =>
+                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     // TODO: support more than one device?
                     CargoClient = device;
 
                     IsConnected = true;
-
-                    //TODO: call an "OnConnected" function
-
-                    // Bluetooth is sensitive to multiple things going on at once across different threads
-                    // so let's make sure we go about this serially
-
-                    Properties = new BandProperties(CargoClient);
-                    await Properties.InitAsync();
-
-                    Theme = new BandTheme(CargoClient);
-                    await Theme.InitAsync();
-
-                    Sensors = new BandSensors(CargoClient);
-                    await Sensors.InitAsync();
-
-                    Tiles = new BandTiles(CargoClient);
-                    await Tiles.InitAsync();
                 }));
             }
         }
@@ -268,7 +189,6 @@ namespace unBand.BandHelpers
             var devices = new List<IBandInfo>();
 
             devices.AddRange(await GetConnectedUSBDevicesAsync());
-            devices.AddRange(await GetConnectedBluetoothDevicesAsync());
 
             return devices.ToArray();
         }
@@ -276,12 +196,6 @@ namespace unBand.BandHelpers
         private static async Task<IBandInfo[]> GetConnectedUSBDevicesAsync()
         {
             return await BandAdminClientManager.Instance.GetBandsAsync();
-        }
-
-        private static async Task<IBandInfo[]> GetConnectedBluetoothDevicesAsync()
-        {
-            return new IBandInfo[] {};
-                // Temporary BT removal: await CargoClientExtender.BluetoothClient.GetConnectedDevicesAsync();
         }
 
         private async Task<ICargoClient> GetUsbBand()
@@ -292,7 +206,7 @@ namespace unBand.BandHelpers
             {
                 _deviceInfo = devices[0];
 
-                return (await BandAdminClientManager.Instance.ConnectAsync(_deviceInfo)) as ICargoClient;
+                return (await BandAdminClientManager.Instance.ConnectAsync(_deviceInfo));
             }
 
             return null;
@@ -303,7 +217,7 @@ namespace unBand.BandHelpers
             return IsDesktopSyncAppRunning = (Process.GetProcessesByName("Microsoft Band Sync").Length > 0);
         }
 
-        private void InitializeCargoLogging()
+        private static void InitializeCargoLogging()
         {
             // get log instance
             var field = typeof (Logger).GetField("traceListenerInternal", BindingFlags.Static | BindingFlags.NonPublic);

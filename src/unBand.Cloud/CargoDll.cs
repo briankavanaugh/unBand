@@ -9,7 +9,7 @@ namespace unBand.Cloud
 {
     public static class CargoDll
     {
-        private static readonly List<string> _bandDlls = new List<string>
+        private static readonly List<string> BandDlls = new List<string>
         {
             "Microsoft.Band.Admin.Desktop",
             "Microsoft.Band.Admin",
@@ -60,7 +60,7 @@ namespace unBand.Cloud
                 unbandBandDllPath = GetUnBandAppDataDir();
             }
 
-            foreach (var dllName in _bandDlls)
+            foreach (var dllName in BandDlls)
             {
                 GetUnBandBandDll(dllName, unbandBandDllPath);
             }
@@ -166,7 +166,7 @@ namespace unBand.Cloud
             if (!Directory.Exists(path))
                 return false;
 
-            foreach (var dll in _bandDlls)
+            foreach (var dll in BandDlls)
             {
                 var file = Path.Combine(path, dll + ".dll");
 
