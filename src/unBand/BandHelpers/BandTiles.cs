@@ -9,9 +9,9 @@ namespace unBand.BandHelpers
 {
     internal class BandTiles
     {
-        private readonly CargoClient _client;
+        private readonly ICargoClient _client;
 
-        public BandTiles(CargoClient client)
+        public BandTiles(ICargoClient client)
         {
             _client = client;
         }

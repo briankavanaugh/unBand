@@ -30,7 +30,7 @@ namespace unBand.BandHelpers
         // magic values for the background size (if you pass anything else in you get an exception)
         public static short BACKGROUND_WIDTH = 310;
         public static short BACKGROUND_HEIGHT = 102;
-        private readonly CargoClient _client;
+        private readonly ICargoClient _client;
         private WriteableBitmap _background;
         private SolidColorBrush _baseColor;
         private SolidColorBrush _highContrastColor;
@@ -41,7 +41,7 @@ namespace unBand.BandHelpers
         private SolidColorBrush _secondaryTextColor;
         private Microsoft.Band.BandTheme _themeColor;
 
-        public BandTheme(CargoClient client)
+        public BandTheme(ICargoClient client)
         {
             _client = client;
         }

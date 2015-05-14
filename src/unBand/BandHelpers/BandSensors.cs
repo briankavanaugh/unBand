@@ -6,9 +6,9 @@ namespace unBand.BandHelpers
 {
     internal class BandSensors
     {
-        private readonly CargoClient _client;
+        private readonly ICargoClient _client;
 
-        public BandSensors(CargoClient client)
+        public BandSensors(ICargoClient client)
         {
             _client = client;
         }

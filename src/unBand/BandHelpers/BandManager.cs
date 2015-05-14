@@ -18,7 +18,7 @@ namespace unBand.BandHelpers
     internal class BandManager : INotifyPropertyChanged
     {
         private static DispatcherTimer _timer;
-        private CargoClient _cargoClient;
+        private ICargoClient _cargoClient;
         private IBandInfo _deviceInfo;
         private bool _isConnected;
         private bool _isDesktopSyncAppRunning;
@@ -67,7 +67,7 @@ namespace unBand.BandHelpers
             }
         }
 
-        public CargoClient CargoClient
+        public ICargoClient CargoClient
         {
             get { return _cargoClient; }
             set
@@ -284,7 +284,7 @@ namespace unBand.BandHelpers
                 // Temporary BT removal: await CargoClientExtender.BluetoothClient.GetConnectedDevicesAsync();
         }
 
-        private async Task<CargoClient> GetUsbBand()
+        private async Task<ICargoClient> GetUsbBand()
         {
             var devices = await GetConnectedUSBDevicesAsync();
 
@@ -292,7 +292,7 @@ namespace unBand.BandHelpers
             {
                 _deviceInfo = devices[0];
 
-                return (await BandAdminClientManager.Instance.ConnectAsync(_deviceInfo)) as CargoClient;
+                return (await BandAdminClientManager.Instance.ConnectAsync(_deviceInfo)) as ICargoClient;
             }
 
             return null;

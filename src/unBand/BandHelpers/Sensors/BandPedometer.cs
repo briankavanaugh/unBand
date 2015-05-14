@@ -10,11 +10,11 @@ namespace unBand.BandHelpers.Sensors
 {
     public class BandPedometer : INotifyPropertyChanged
     {
-        private readonly CargoClient _client;
+        private readonly ICargoClient _client;
         private uint _totalMovements;
         private uint _totalSteps;
 
-        public BandPedometer(CargoClient client)
+        public BandPedometer(ICargoClient client)
         {
             _client = client;
         }

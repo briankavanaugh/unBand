@@ -103,17 +103,21 @@
       <HintPath>..\packages\MahApps.Metro.1.1.2.0\lib\net45\MahApps.Metro.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Band">
-      <HintPath>..\Microsoft.Band.dll</HintPath>
+    <Reference Include="Microsoft.Band, Version=1.3.10423.3, Culture=neutral, PublicKeyToken=608d7da3159f502b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft Band Sync\Microsoft.Band.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Band.Admin">
-      <HintPath>..\Microsoft.Band.Admin.dll</HintPath>
+    <Reference Include="Microsoft.Band.Admin, Version=1.3.10423.3, Culture=neutral, PublicKeyToken=608d7da3159f502b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft Band Sync\Microsoft.Band.Admin.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Band.Admin.Desktop">
-      <HintPath>..\Microsoft.Band.Admin.Desktop.dll</HintPath>
+    <Reference Include="Microsoft.Band.Admin.Desktop, Version=1.3.10423.3, Culture=neutral, PublicKeyToken=608d7da3159f502b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft Band Sync\Microsoft.Band.Admin.Desktop.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Band.Desktop">
-      <HintPath>..\Microsoft.Band.Desktop.dll</HintPath>
+    <Reference Include="Microsoft.Band.Desktop, Version=1.3.10423.3, Culture=neutral, PublicKeyToken=608d7da3159f502b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft Band Sync\Microsoft.Band.Desktop.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack">
       <HintPath>..\packages\WindowsAPICodePack-Core.1.1.1\lib\Microsoft.WindowsAPICodePack.dll</HintPath>

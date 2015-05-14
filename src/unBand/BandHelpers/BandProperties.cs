@@ -14,13 +14,13 @@ namespace unBand.BandHelpers
     /// </summary>
     internal class BandProperties : INotifyPropertyChanged
     {
-        private readonly CargoClient _client;
+        private readonly ICargoClient _client;
         private string _deviceName;
         private DateTime _deviceTime;
         private byte _percentCharge;
         private Timer _timeUpdater;
 
-        internal BandProperties(CargoClient client)
+        internal BandProperties(ICargoClient client)
         {
             _client = client;
         }
