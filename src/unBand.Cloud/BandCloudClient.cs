@@ -113,7 +113,7 @@ namespace unBand.Cloud
                 AuthenticationCompleted();
         }
 
-        private string GenerateEventsQuery(int? topCount = null, DateTime? startDate = null, DateTime? endDate = null, string timeField = "StartTime")
+        private static string GenerateEventsQuery(int? topCount = null, DateTime? startDate = null, DateTime? endDate = null, string timeField = "StartTime")
         {
             var query = new ODataQuery();
 

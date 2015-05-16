@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using unBand.BandHelpers;
@@ -30,8 +31,18 @@ namespace unBand
                 return;
             }
 
+            CommandBindings.Add(new CommandBinding(ApplicationCommands.Open, OpenCmdExecuted));
+
             // Create just creates the singleton - call Start() to actually get things rolling
             BandManager.Create();
+        }
+
+        private void OpenCmdExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (Equals(this, sender))
+            {
+                WindowState = WindowState.Normal;
+            }
         }
 
         private async void MetroWindow_Loaded(object sender, RoutedEventArgs e)
