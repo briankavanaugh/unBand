@@ -65,10 +65,9 @@ namespace unBand.BandHelpers
         
         #region Non-Changing Properties
 
-        public string PermanentSerialNumber { get; private set; }
         public string ProductSerialNumber { get; private set; }
         public bool IsValidFirmware { get; private set; }
-        public FirmwareVersions FirmwareVersions { get; private set; }
+        public string FirmwareVersions { get; private set; }
         public EphemerisCoverageDates EphemerisCoverageDates { get; private set; }
         public UInt16 LogVersion { get; private set; }
         public UInt32 MaxStrappCount { get; private set; } // TODO: can this be set? There is no function to do this, but there are generic property dictionaries
@@ -87,11 +86,10 @@ namespace unBand.BandHelpers
 
         public async Task InitAsync()
         {
-            PermanentSerialNumber = await _client.GetPermanentSerialNumberAsync();
             ProductSerialNumber   = await _client.GetProductSerialNumberAsync();
 
             IsValidFirmware  = await _client.GetFirmwareBinariesValidationStatusAsync();
-            FirmwareVersions = await _client.GetFirmwareVersionsAsync();
+            FirmwareVersions = await _client.GetFirmwareVersionAsync();
             EphemerisCoverageDates = await _client.GetGpsEphemerisCoverageDatesFromDeviceAsync();
             LogVersion = await _client.GetLogVersionAsync();
             MaxStrappCount = await _client.GetMaxTileCountAsync();

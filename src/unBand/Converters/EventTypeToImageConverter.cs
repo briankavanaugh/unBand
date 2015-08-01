@@ -10,44 +10,47 @@ using unBand.Cloud;
 
 namespace unBand
 {
-    class EventTypeToImageConverter : IValueConverter
-    {
-        private static BitmapImage _imageWorkout = new BitmapImage(new Uri("/assets/icons/activity_workout.png", UriKind.RelativeOrAbsolute));
-        private static BitmapImage _imageGuidedWorkout = new BitmapImage(new Uri("/assets/icons/activity_guided_workout.png", UriKind.RelativeOrAbsolute));
-        private static BitmapImage _imageSleeping = new BitmapImage(new Uri("/assets/icons/activity_sleep.png", UriKind.RelativeOrAbsolute));
-        private static BitmapImage _imageRunning = new BitmapImage(new Uri("/assets/icons/activity_run.png", UriKind.RelativeOrAbsolute));
-        private static BitmapImage _imageDailyActivity = new BitmapImage(new Uri("/assets/icons/user_activity.png", UriKind.RelativeOrAbsolute));
-        private static BitmapImage _imageBiking = new BitmapImage(new Uri("/assets/icons/activity_biking.png", UriKind.RelativeOrAbsolute));
+	class EventTypeToImageConverter : IValueConverter
+	{
+		private static BitmapImage _imageWorkout = new BitmapImage(new Uri("/assets/icons/activity_workout.png", UriKind.RelativeOrAbsolute));
+		private static BitmapImage _imageGuidedWorkout = new BitmapImage(new Uri("/assets/icons/activity_guided_workout.png", UriKind.RelativeOrAbsolute));
+		private static BitmapImage _imageSleeping = new BitmapImage(new Uri("/assets/icons/activity_sleep.png", UriKind.RelativeOrAbsolute));
+		private static BitmapImage _imageRunning = new BitmapImage(new Uri("/assets/icons/activity_run.png", UriKind.RelativeOrAbsolute));
+		private static BitmapImage _imageDailyActivity = new BitmapImage(new Uri("/assets/icons/user_activity.png", UriKind.RelativeOrAbsolute));
+		private static BitmapImage _imageBiking = new BitmapImage(new Uri("/assets/icons/activity_biking.png", UriKind.RelativeOrAbsolute));
+		private static BitmapImage _imageGolf = new BitmapImage( new Uri( "/assets/icons/activity_golf.png", UriKind.RelativeOrAbsolute ) );
 
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            var eventType = value as BandEventType?;
+		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			var eventType = value as BandEventType?;
 
-            if (eventType == null) 
-                return null;
+			if (eventType == null) 
+				return null;
 
-            switch (eventType)
-            {
-                case BandEventType.GuidedWorkout:
-                    return _imageGuidedWorkout;
-                case BandEventType.Workout:
-                    return _imageWorkout;
-                case BandEventType.Sleeping:
-                    return _imageSleeping;
-                case BandEventType.Running:
-                    return _imageRunning;
-                case BandEventType.UserDailyActivity:
-                    return _imageDailyActivity;
-                case BandEventType.Biking:
-                    return _imageBiking;
-                default:
-                    return null;
-            }
-        }
+			switch (eventType)
+			{
+				case BandEventType.GuidedWorkout:
+					return _imageGuidedWorkout;
+				case BandEventType.Workout:
+					return _imageWorkout;
+				case BandEventType.Sleeping:
+					return _imageSleeping;
+				case BandEventType.Running:
+					return _imageRunning;
+				case BandEventType.UserDailyActivity:
+					return _imageDailyActivity;
+				case BandEventType.Biking:
+					return _imageBiking;
+				case BandEventType.Golf:
+					return _imageGolf;
+				default:
+					return null;
+			}
+		}
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

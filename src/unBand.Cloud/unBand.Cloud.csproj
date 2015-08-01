@@ -57,11 +57,15 @@
     <Compile Include="Events\BandMapPointCollection.cs" />
     <Compile Include="Events\ExerciseEventSequenceItem.cs" />
     <Compile Include="Events\BikeEvent.cs" />
+    <Compile Include="Events\GolfEvent.cs" />
+    <Compile Include="Events\GolfEventHoleSequenceItem.cs" />
     <Compile Include="Events\IBandEventWithMapPoints.cs" />
     <Compile Include="Events\UserDailyActivity.cs" />
     <Compile Include="Events\UserWorkoutEvent.cs" />
     <Compile Include="Events\UserGuidedWorkoutEvent.cs" />
     <Compile Include="Events\RunEvent.cs" />
+    <Compile Include="Exporters\EventExporters\GolfSequencesToCSVExporter.cs" />
+    <Compile Include="Exporters\EventExporters\Helpers\GolfEventHoleSequenceDumper.cs" />
     <Compile Include="Exporters\EventExporters\UserDailyActivityToCSVExporter.cs" />
     <Compile Include="Exporters\EventExporters\EventInfoToCSVExporter.cs" />
     <Compile Include="Exporters\EventExporters\Helpers\ExerciseSequenceDumper.cs" />
